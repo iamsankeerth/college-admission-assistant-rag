@@ -1,0 +1,74 @@
+[
+  {
+    "doc_id": "iith-admissions",
+    "college_name": "IIT Hyderabad",
+    "title": "IIT Hyderabad Admissions",
+    "url": "https://www.iith.ac.in/academics/admissions/",
+    "published_at": "2026-01-01T00:00:00Z",
+    "content": "The IIT Hyderabad admissions page explains that undergraduate admissions are handled through national counselling processes such as JoSAA and CSAB. Candidates should rely on official counselling schedules, eligibility rules, seat matrix updates, and institute notices for the current admission cycle."
+  },
+  {
+    "doc_id": "iith-fees",
+    "college_name": "IIT Hyderabad",
+    "title": "IIT Hyderabad Fee Structure",
+    "url": "https://www.iith.ac.in/academics/fee-structure/",
+    "published_at": "2026-01-05T00:00:00Z",
+    "content": "The official IIT Hyderabad fee structure page describes tuition and institute fees, while separate notices may explain hostel, mess, caution deposit, and refund policies. Students should always verify the latest PDF or circular before making budget decisions."
+  },
+  {
+    "doc_id": "iith-placement",
+    "college_name": "IIT Hyderabad",
+    "title": "IIT Hyderabad Career Development Services",
+    "url": "https://cds.iith.ac.in/",
+    "published_at": "2026-01-10T00:00:00Z",
+    "content": "The Career Development Services portal highlights training, internships, placement coordination, recruiter engagement, and career support. Official placement details should come from the institute placement office and authenticated reports rather than rumors or unaudited social posts."
+  },
+  {
+    "doc_id": "iith-hostel",
+    "college_name": "IIT Hyderabad",
+    "title": "IIT Hyderabad Hostel and Student Life",
+    "url": "https://www.iith.ac.in/campus-life/hostel/",
+    "published_at": "2026-01-12T00:00:00Z",
+    "content": "The institute hostel page provides official information on residence facilities, student amenities, mess operations, and campus life resources. Hostel experience can vary from student to student, so public commentary should be treated as advisory and not as a substitute for official hostel policies."
+  },
+  {
+    "doc_id": "iith-academics",
+    "college_name": "IIT Hyderabad",
+    "title": "IIT Hyderabad Academics",
+    "url": "https://www.iith.ac.in/academics/",
+    "published_at": "2026-01-08T00:00:00Z",
+    "content": "The academics section describes departments, curriculum, research focus, regulations, and academic processes. Students should consult the institute curriculum, senate rules, and departmental pages for the latest academic information."
+  },
+  {
+    "doc_id": "nittrichy-admissions",
+    "college_name": "NIT Trichy",
+    "title": "NIT Trichy Admissions",
+    "url": "https://www.nitt.edu/home/academics/admissions/",
+    "published_at": "2026-01-01T00:00:00Z",
+    "content": "The NIT Trichy admissions page explains that undergraduate seats are allotted through JoSAA and CSAB according to current counselling rules, eligibility criteria, and reservation policy. Applicants should verify programme-specific notices and official documents for the latest cycle."
+  },
+  {
+    "doc_id": "nittrichy-fees",
+    "college_name": "NIT Trichy",
+    "title": "NIT Trichy Fees and Payments",
+    "url": "https://www.nitt.edu/home/academics/fees/",
+    "published_at": "2026-01-03T00:00:00Z",
+    "content": "The institute fee page lists tuition, student activity, hostel, and mess related fee components. Budget planning should use official fee notices and not rely only on third-party summaries."
+  },
+  {
+    "doc_id": "bits-admissions",
+    "college_name": "BITS Pilani",
+    "title": "BITS Pilani Admissions",
+    "url": "https://www.bits-pilani.ac.in/admissions/",
+    "published_at": "2026-01-02T00:00:00Z",
+    "content": "The official BITS Pilani admissions page explains admission pathways, application instructions, and campus-specific notices. Applicants should use authenticated admission bulletins and campus announcements for current information."
+  },
+  {
+    "doc_id": "bits-campus",
+    "college_name": "BITS Pilani",
+    "title": "BITS Pilani Campus Life",
+    "url": "https://www.bits-pilani.ac.in/campuslife/",
+    "published_at": "2026-01-06T00:00:00Z",
+    "content": "The campus life pages describe student activities, clubs, infrastructure, housing, and support systems. Personal experience may differ, so student commentary should be used as context alongside official campus information."
+  }
+]

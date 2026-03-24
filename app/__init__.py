@@ -1,0 +1,1 @@
+"""College admission assistant package."""
