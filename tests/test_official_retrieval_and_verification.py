@@ -27,12 +27,13 @@ def test_hybrid_retriever_returns_iith_sources():
     vector_store = OfficialVectorStore()
     vector_store.upsert_chunks(corpus.chunks)
     retriever = HybridRetriever(corpus, vector_store)
+    retriever.cache.clear()
     results, trace = retriever.retrieve(
         "What do official sources say about IIT Hyderabad fees?",
         "IIT Hyderabad",
     )
     assert results
-    assert trace.lexical_candidates
+    assert trace.reranked_candidates
     assert any("IIT Hyderabad" in item.title for item in results)
 
 

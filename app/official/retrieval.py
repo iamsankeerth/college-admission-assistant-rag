@@ -87,9 +87,11 @@ class HybridRetriever:
             if cached is not None:
                 reranked = self._apply_mmr(question, cached[:final_limit])
                 decision = self.make_decision(reranked)
+                lexical_cached = [c for c in reranked if c.retrieval_stage == "lexical"]
+                vector_cached = [c for c in reranked if c.retrieval_stage == "vector"]
                 trace = RetrievalTrace(
-                    lexical_candidates=[],
-                    vector_candidates=[],
+                    lexical_candidates=lexical_cached,
+                    vector_candidates=vector_cached,
                     reranked_candidates=reranked,
                     decision=decision,
                 )
