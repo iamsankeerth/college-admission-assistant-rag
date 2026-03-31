@@ -48,6 +48,7 @@ class AnswerGenerator(Protocol):
 class TemplateAnswerGenerator:
     def __init__(self) -> None:
         self.prompt_config = settings.answer_prompt
+        self.provider = "template"
 
     def generate(
         self,
@@ -109,6 +110,7 @@ class GeminiAnswerGenerator:
         self.max_attempts = 3
         self.base_delay = 1.0
         self.max_delay = 8.0
+        self.provider = "gemini"
 
         from app.generation.circuit_breaker import get_circuit_breaker, CircuitBreakerConfig
 

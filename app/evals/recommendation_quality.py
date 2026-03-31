@@ -50,11 +50,19 @@ def run_recommendation_quality_check() -> dict:
         checks = _check_quality(response)
         results.append({**profile, **checks})
 
-    all_pass = all(r["pass"] for r in results)
+    failing_profiles = [r for r in results if not r["pass"]]
+    failing_metrics = []
+    for fp in failing_profiles:
+        for issue in fp["issues"]:
+            failing_metrics.append(f"{fp['college_id'] if 'college_id' in fp else 'unknown'}: {issue}")
+
+    all_pass = len(failing_profiles) == 0
     return {
         "status": "pass" if all_pass else "fail",
         "total_profiles": len(TEST_PROFILES),
-        "passed": sum(1 for r in results if r["pass"]),
+        "passed": len(results) - len(failing_profiles),
+        "failing_profiles_count": len(failing_profiles),
+        "failing_metrics": failing_metrics,
         "results": results,
     }
 
@@ -105,8 +113,10 @@ def main() -> None:
     print(json.dumps(result, indent=2))
 
     if result["status"] == "fail":
-        failing = [r for r in result["results"] if not r["pass"]]
-        raise SystemExit(f"Recommendation quality failed: {len(failing)}/{result['total_profiles']} profiles failed")
+        print(f"\nFailing metrics ({len(result['failing_metrics'])}):")
+        for fm in result["failing_metrics"]:
+            print(f"  - {fm}")
+        raise SystemExit(f"Recommendation quality failed: {result['failing_profiles_count']}/{result['total_profiles']} profiles failed")
 
 
 if __name__ == "__main__":

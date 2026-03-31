@@ -104,11 +104,7 @@ class RecommendationService:
         base_items = self._recommend_base(request)
         top_items = base_items[: request.max_results]
 
-        if request.include_public_signals:
-            await self._enrich_batch(top_items, include_public_signals=True)
-        else:
-            for item in top_items:
-                item.enrichment_status = EnrichmentStatus.HYDRATED
+        await self._enrich_batch(top_items, include_public_signals=request.include_public_signals)
 
         top_items.sort(key=lambda x: x.final_score, reverse=True)
 
@@ -248,7 +244,7 @@ class RecommendationService:
     ) -> None:
         try:
             evidence, public_report = await self._build_enrichment(
-                item.college_name, item.matched_branch
+                item.college_name, item.matched_branch, include_public_signals=include_public_signals
             )
             self._apply_enrichment(item, evidence, public_report, include_public_signals)
             item.enrichment_status = EnrichmentStatus.HYDRATED
@@ -256,8 +252,11 @@ class RecommendationService:
             item.enrichment_status = EnrichmentStatus.FAILED
 
     async def _build_enrichment(
-        self, college_name: str, matched_branch: str | None
-    ) -> tuple[dict[str, str], PublicSignalsReport | None]:
+        self,
+        college_name: str,
+        matched_branch: str | None,
+        include_public_signals: bool = True,
+    ) -> tuple[dict[str, Any], PublicSignalsReport | None]:
         questions = {
             "placement": (
                 f"What are the placement statistics for {college_name}? "
@@ -278,19 +277,23 @@ class RecommendationService:
         }
 
         rag_tasks = [self._query_official(q) for q in questions.values()]
-        public_task = self.public_signals_service.analyze(college_name, focus=None)
 
-        rag_results, public_result = await asyncio.gather(
-            asyncio.gather(*rag_tasks, return_exceptions=True),
-            public_task,
-        )
+        if include_public_signals:
+            public_task = self.public_signals_service.analyze(college_name, focus=None)
+            rag_results, public_result = await asyncio.gather(
+                asyncio.gather(*rag_tasks, return_exceptions=True),
+                public_task,
+            )
+            public_report = None if isinstance(public_result, Exception) else public_result
+        else:
+            rag_results = await asyncio.gather(*rag_tasks, return_exceptions=True)
+            public_report = None
 
         answers = {
             key: "" if isinstance(val, Exception) else val
             for key, val in zip(questions.keys(), rag_results)
         }
 
-        public_report = None if isinstance(public_result, Exception) else public_result
         theme_map = self._map_themes(public_report) if public_report else {}
 
         return {"answers": answers, "themes": theme_map}, public_report
@@ -473,8 +476,6 @@ class RecommendationService:
             if has_bias and public_adj > 0:
                 public_adj = 0.0
             public_adj = max(-0.01, min(0.01, public_adj))
-            if public_adj > 0 and abs(public_adj) > abs(official_adj) * 0.5:
-                public_adj = 0.0
         else:
             if has_bias and public_adj > 0:
                 public_adj = 0.0
@@ -528,7 +529,9 @@ class RecommendationService:
 
     async def explore(self, request: CollegeExploreRequest) -> CollegeExploreResponse:
         college_name = request.college_name
-        evidence, public_report = await self._build_enrichment(college_name, request.branch)
+        evidence, public_report = await self._build_enrichment(
+            college_name, request.branch, include_public_signals=request.include_public_signals
+        )
         answers = evidence.get("answers", {})
         themes = evidence.get("themes", {})
 

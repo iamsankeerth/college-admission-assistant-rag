@@ -69,6 +69,14 @@ def run_latency_check(max_p50_ms: float = 2000.0, max_p95_ms: float = 5000.0) ->
     p50_pass = p50 <= max_p50_ms
     p95_pass = p95 <= max_p95_ms
 
+    failing_metrics: list[str] = []
+    if not p50_pass:
+        failing_metrics.append(f"p50_latency: {p50}ms > {max_p50_ms}ms threshold")
+    if not p95_pass:
+        failing_metrics.append(f"p95_latency: {p95}ms > {max_p95_ms}ms threshold")
+    if errors > 0:
+        failing_metrics.append(f"query_errors: {errors} queries failed")
+
     return {
         "status": "pass" if (p50_pass and p95_pass) else "fail",
         "queries_run": len(latencies),
@@ -80,6 +88,7 @@ def run_latency_check(max_p50_ms: float = 2000.0, max_p95_ms: float = 5000.0) ->
         "threshold_p95_ms": max_p95_ms,
         "p50_pass": p50_pass,
         "p95_pass": p95_pass,
+        "failing_metrics": failing_metrics,
     }
 
 
@@ -99,6 +108,9 @@ def main() -> None:
     print(json.dumps(result, indent=2))
 
     if result["status"] == "fail":
+        print(f"\nFailing metrics ({len(result['failing_metrics'])}):")
+        for fm in result["failing_metrics"]:
+            print(f"  - {fm}")
         raise SystemExit(f"Latency budget failed: p50={result['p50_ms']}ms, p95={result['p95_ms']}ms")
 
 

@@ -2,11 +2,12 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
 from app.api.middleware import get_request_id
 from app.config import settings
+from app.exceptions import CorpusError, NotFoundError
 from app.models import (
     CollegeExploreRequest,
     CollegeExploreResponse,
@@ -147,7 +148,11 @@ class RefreshResponse(BaseModel):
 
 @v1.get("/admin/corpus/status", response_model=CorpusStatusResponse)
 async def v1_corpus_status() -> CorpusStatusResponse:
-    version_info = corpus_manager.get_version()
+    try:
+        version_info = corpus_manager.get_version()
+    except Exception as exc:
+        raise CorpusError(f"Failed to read corpus version: {exc}")
+
     corpus_version = version_info.version if version_info else None
     schema_version = version_info.schema_version if version_info else settings.index_schema_version
     is_stale = version_info.is_stale() if version_info else True
@@ -164,9 +169,13 @@ async def v1_corpus_status() -> CorpusStatusResponse:
 
 @v1.post("/admin/corpus/refresh", response_model=RefreshResponse)
 async def v1_corpus_refresh() -> RefreshResponse:
-    official_service.retriever.refresh()
-    college_names = {chunk.college_name for chunk in official_service.corpus.chunks}
-    version = corpus_manager.update_from_corpus(official_service.corpus, len(college_names))
+    try:
+        official_service.retriever.refresh()
+        college_names = {chunk.college_name for chunk in official_service.corpus.chunks}
+        version = corpus_manager.update_from_corpus(official_service.corpus, len(college_names))
+    except Exception as exc:
+        raise CorpusError(f"Failed to refresh corpus: {exc}")
+
     return RefreshResponse(
         status="ok",
         new_version=version.version,
@@ -203,7 +212,7 @@ async def v1_list_colleges() -> list[CollegeProfileResponse]:
 async def v1_get_college(college_id: str) -> CollegeProfileResponse:
     profile = profile_store.get(college_id)
     if profile is None:
-        raise HTTPException(status_code=404, detail=f"College profile '{college_id}' not found")
+        raise NotFoundError(f"College profile '{college_id}' not found")
     return CollegeProfileResponse.model_validate(profile)
 
 
@@ -213,7 +222,7 @@ async def v1_update_college(
 ) -> CollegeProfileResponse:
     profile = profile_store.get(college_id)
     if profile is None:
-        raise HTTPException(status_code=404, detail=f"College profile '{college_id}' not found")
+        raise NotFoundError(f"College profile '{college_id}' not found")
 
     update_data = request.model_dump(exclude_unset=True)
     for field, value in update_data.items():
@@ -228,7 +237,7 @@ async def v1_update_college(
 async def v1_delete_college(college_id: str) -> dict:
     deleted = profile_store.delete(college_id)
     if not deleted:
-        raise HTTPException(status_code=404, detail=f"College profile '{college_id}' not found")
+        raise NotFoundError(f"College profile '{college_id}' not found")
     return {"status": "deleted", "college_id": college_id}
 
 
