@@ -29,11 +29,17 @@ jobs:
         run: pytest
 
       - name: Run fast evaluation gate
-        run: python -m app.evals.fast_eval --dataset evals/golden_queries.jsonl --report evals/fast_eval_report.json
+        run: python -m app.evals.fast_eval --dataset evals/golden_queries.jsonl --report evals/reports/fast_eval_report.json
 
-      - name: Upload fast evaluation report
+      - name: Run recommendation quality gate
+        run: python -m app.evals.recommendation_quality --report evals/reports/rec_quality_check.json
+
+      - name: Run latency budget check
+        run: python -m app.evals.latency_check --report evals/reports/latency_check.json
+
+      - name: Upload evaluation reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: fast-eval-report
-          path: evals/fast_eval_report.json
+          name: eval-reports
+          path: evals/reports/
