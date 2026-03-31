@@ -275,3 +275,11 @@ async def v1_feedback(request: FeedbackRequest) -> FeedbackResponse:
         feedback_id=feedback_id,
         recorded_at=feedback_entry["recorded_at"],
     )
+
+
+@v1.get("/metrics", tags=["observability"])
+async def v1_metrics():
+    if not settings.metrics_enabled:
+        return {"status": "disabled", "message": "Metrics are disabled. Set METRICS_ENABLED=true to enable."}
+    from app.observability import get_metrics
+    return get_metrics().get_all()

@@ -223,3 +223,11 @@ async def admin_ingest(request: OfficialIngestRequest):
         title=request.title,
         source_kind=request.source_kind,
     )
+
+
+@app.get("/metrics", tags=["observability"])
+async def metrics():
+    if not settings.metrics_enabled:
+        return {"status": "disabled", "message": "Metrics are disabled. Set METRICS_ENABLED=true to enable."}
+    from app.observability import get_metrics
+    return get_metrics().get_all()
