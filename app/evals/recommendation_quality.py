@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import asyncio
 import json
 from pathlib import Path
 
@@ -39,14 +40,14 @@ TEST_PROFILES = [
 ]
 
 
-def run_recommendation_quality_check() -> dict:
+async def run_recommendation_quality_check() -> dict:
     service = RecommendationService()
     results: list[dict] = []
 
     for profile in TEST_PROFILES:
         from app.models import RecommendationRequest
         request = RecommendationRequest(**profile)
-        response = service.recommend(request)
+        response = await service.recommend(request)
         checks = _check_quality(response)
         results.append({**profile, **checks})
 
@@ -104,7 +105,7 @@ def main() -> None:
     parser.add_argument("--report", default=str(Path(settings.eval_report_dir) / "rec_quality_check.json"))
     args = parser.parse_args()
 
-    result = run_recommendation_quality_check()
+    result = asyncio.run(run_recommendation_quality_check())
 
     report_path = Path(args.report)
     report_path.parent.mkdir(parents=True, exist_ok=True)
