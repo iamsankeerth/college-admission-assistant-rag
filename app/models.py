@@ -26,6 +26,32 @@ class QueryStatus(str, Enum):
     insufficient_evidence = "insufficient_evidence"
 
 
+class ErrorCode(str, Enum):
+    VALIDATION_ERROR = "VALIDATION_ERROR"
+    NOT_FOUND = "NOT_FOUND"
+    RETRIEVAL_ERROR = "RETRIEVAL_ERROR"
+    GENERATION_ERROR = "GENERATION_ERROR"
+    CIRCUIT_BREAKER_OPEN = "CIRCUIT_BREAKER_OPEN"
+    INSUFFICIENT_EVIDENCE = "INSUFFICIENT_EVIDENCE"
+    SERVICE_UNAVAILABLE = "SERVICE_UNAVAILABLE"
+    CORPUS_ERROR = "CORPUS_ERROR"
+    INTERNAL_ERROR = "INTERNAL_ERROR"
+    RATE_LIMITED = "RATE_LIMITED"
+    PUBLIC_SIGNALS_ERROR = "PUBLIC_SIGNALS_ERROR"
+
+
+class ErrorDetail(BaseModel):
+    code: ErrorCode
+    message: str
+    details: dict | None = None
+
+
+class ErrorResponse(BaseModel):
+    error: ErrorDetail
+    request_id: str | None = None
+    warnings: list[str] = Field(default_factory=list)
+
+
 class ThemeSummary(BaseModel):
     topic: str
     summary: str
@@ -216,6 +242,7 @@ class VerificationReport(BaseModel):
 
 
 class QueryResponse(BaseModel):
+    request_id: str | None = None
     status: QueryStatus
     answer: str
     citations: list[AnswerCitation] = Field(default_factory=list)
@@ -229,6 +256,7 @@ class QueryResponse(BaseModel):
     youtube_signals: list[YouTubeSignal] = Field(default_factory=list)
     bias_warnings: list[BiasWarning] = Field(default_factory=list)
     debug_trace: RetrievalTrace | None = None
+    warnings: list[str] = Field(default_factory=list)
 
 
 class CollegeSourceManifest(BaseModel):
@@ -315,6 +343,12 @@ class RecommendationEvidence(BaseModel):
     citations: list[AnswerCitation] = Field(default_factory=list)
 
 
+class EnrichmentStatus(str, Enum):
+    PENDING = "pending"
+    HYDRATED = "hydrated"
+    FAILED = "failed"
+
+
 class RecommendationItem(BaseModel):
     college_id: str
     college_name: str
@@ -324,15 +358,18 @@ class RecommendationItem(BaseModel):
     zone: str
     matched_branch: str | None = None
     fit_bucket: str
-    score: float
-    affordability_score: float
-    rank_score: float
-    location_score: float
+    base_score: float
+    hybrid_adjustment: float = 0.0
+    final_score: float
+    score: float = 0.0
+    score_breakdown: ScoreBreakdown | None = None
+    hybrid_adjustment_breakdown: HybridAdjustmentBreakdown | None = None
+    enrichment_status: EnrichmentStatus = EnrichmentStatus.PENDING
     reasons: list[str] = Field(default_factory=list)
     annual_cost_lakh: float
     hostel_available: bool = True
     official_source_urls: list[str] = Field(default_factory=list)
-    rag_evidence: RecommendationEvidence | None = None
+    enrichment: Enrichment3Section | None = None
     soft_factors: SoftFactors | None = None
     public_signals_disclaimer: str = (
         "The signals below are sourced from Reddit and YouTube — crowdsourced, "
@@ -342,9 +379,81 @@ class RecommendationItem(BaseModel):
     public_signals_report: PublicSignalsReport | None = None
 
 
+class ScoreBreakdown(BaseModel):
+    rank_score: float
+    affordability_score: float
+    location_score: float
+    hostel_bonus: float
+
+
+class HybridAdjustmentBreakdown(BaseModel):
+    official_evidence_adjustment: float = 0.0
+    public_signals_adjustment: float = 0.0
+    reason: str = ""
+
+
+class FitSnapshot(BaseModel):
+    fit_bucket: str
+    matched_branch: str | None = None
+    rank_score: float
+    closing_rank: int | None = None
+    fit_notes: list[str] = Field(default_factory=list)
+
+
+class CostAndAdmissions(BaseModel):
+    annual_cost_lakh: float
+    hostel_available: bool
+    scholarship_notes: str = ""
+    admission_process: str = ""
+    counselling_body: str = ""
+    official_source_url: str | None = None
+
+
+class OutcomesAndCampus(BaseModel):
+    placement_summary: str = ""
+    roi_indicator: str = ""
+    lab_facilities: str = ""
+    startup_culture: str = ""
+    extracurriculars: str = ""
+    attendance_policy: str = ""
+
+
+class Enrichment3Section(BaseModel):
+    fit_snapshot: FitSnapshot | None = None
+    cost_and_admissions: CostAndAdmissions | None = None
+    outcomes_and_campus: OutcomesAndCampus | None = None
+
+
+class CollegeExploreRequest(BaseModel):
+    college_name: str
+    branch: str | None = None
+    rank: int | None = None
+    include_public_signals: bool = True
+
+
+class CollegeExploreResponse(BaseModel):
+    request_id: str | None = None
+    college_name: str
+    college_id: str | None = None
+    enrichment_status: EnrichmentStatus = EnrichmentStatus.PENDING
+    official_summary: str = ""
+    citations: list[AnswerCitation] = Field(default_factory=list)
+    official_sources: list[OfficialSource] = Field(default_factory=list)
+    enrichment: Enrichment3Section | None = None
+    public_signals_disclaimer: str = (
+        "The signals below are sourced from Reddit and YouTube — crowdsourced, "
+        "unverified, and may include promotional or exaggerated claims. "
+        "Treat as directional only. Official institute sources take precedence."
+    )
+    public_signals_report: PublicSignalsReport | None = None
+    warnings: list[str] = Field(default_factory=list)
+
+
 class RecommendationResponse(BaseModel):
+    request_id: str | None = None
     student_profile: RecommendationRequest
     recommendations: list[RecommendationItem] = Field(default_factory=list)
+    stage: str = "base"  # "base" | "enriched"
     filtered_out_count: int = 0
     notes: list[str] = Field(default_factory=list)
 

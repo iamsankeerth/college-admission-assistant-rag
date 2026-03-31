@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from typing import Any
 
 import streamlit as st
@@ -44,6 +45,20 @@ def _get_recommendation_backend() -> tuple[Any | None, Any | None, Any | None, s
         return None, None, None, str(exc)
 
 
+def _sync_recommend(service: Any, request: Any) -> Any:
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            import concurrent.futures
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                future = pool.submit(asyncio.run, service.recommend(request))
+                return future.result()
+        else:
+            return loop.run_until_complete(service.recommend(request))
+    except RuntimeError:
+        return asyncio.run(service.recommend(request))
+
+
 def _normalize_items(response: Any) -> list[dict[str, Any]]:
     if response is None:
         return []
@@ -76,6 +91,9 @@ def _render_recommendation_card(item: dict[str, Any], rank: int) -> None:
     score = float(item.get("score", 0.0))
     location = ", ".join(part for part in [item.get("city"), item.get("state")] if part)
     reasons = item.get("reasons", [])
+    soft_factors = item.get("soft_factors") or {}
+    public_signals_disclaimer = item.get("public_signals_disclaimer", "")
+    public_signals_report = item.get("public_signals_report")
     rag_evidence = item.get("rag_evidence") or {}
     citations = rag_evidence.get("citations", [])
 
@@ -101,9 +119,39 @@ def _render_recommendation_card(item: dict[str, Any], rank: int) -> None:
             for reason in reasons:
                 st.write(f"- {reason}")
 
+        if soft_factors:
+            st.markdown("**Soft Factors**")
+            soft_cols = st.columns(3)
+            with soft_cols[0]:
+                if soft_factors.get("placement_summary"):
+                    st.markdown("**Placements**")
+                    st.caption(soft_factors["placement_summary"][:200] + "..." if len(soft_factors.get("placement_summary", "")) > 200 else soft_factors.get("placement_summary", "N/A"))
+            with soft_cols[1]:
+                if soft_factors.get("lab_facilities"):
+                    st.markdown("**Labs & Faculty**")
+                    st.caption(soft_factors["lab_facilities"][:200] + "..." if len(soft_factors.get("lab_facilities", "")) > 200 else soft_factors.get("lab_facilities", "N/A"))
+            with soft_cols[2]:
+                if soft_factors.get("extracurriculars"):
+                    st.markdown("**Campus Life**")
+                    st.caption(soft_factors["extracurriculars"][:200] + "..." if len(soft_factors.get("extracurriculars", "")) > 200 else soft_factors.get("extracurriculars", "N/A"))
+
         if rag_evidence.get("summary"):
             st.markdown("**Official evidence snapshot**")
             st.write(rag_evidence["summary"])
+
+        if public_signals_disclaimer and public_signals_report:
+            with st.expander("Student Signals (Reddit/YouTube) - unverified"):
+                st.caption(public_signals_disclaimer)
+                reddit = public_signals_report.get("reddit_signals", []) if isinstance(public_signals_report, dict) else []
+                youtube = public_signals_report.get("youtube_signals", []) if isinstance(public_signals_report, dict) else []
+                if reddit:
+                    st.markdown(f"**Reddit** ({len(reddit)} posts)")
+                    for sig in reddit[:3]:
+                        st.markdown(f"- [{sig.get('title', 'Post')}]({sig.get('url', '')})")
+                if youtube:
+                    st.markdown(f"**YouTube** ({len(youtube)} videos)")
+                    for sig in youtube[:3]:
+                        st.markdown(f"- [{sig.get('title', 'Video')}]({sig.get('url', '')})")
 
         if citations:
             with st.expander("Official citations"):
@@ -143,7 +191,7 @@ def main() -> None:
         cities_raw = st.text_input("Preferred cities (comma separated)", "Hyderabad, Chennai")
         hostel_required = st.checkbox("Hostel preference matters", value=True)
         max_results = st.slider("Number of recommendations", min_value=3, max_value=10, value=5)
-        include_rag_summary = st.checkbox("Include official RAG summary", value=True)
+        include_public_signals = st.checkbox("Include public signals (Reddit/YouTube)", value=True)
         submitted = st.button("Find Best-Fit Colleges", type="primary")
 
     if not submitted:
@@ -161,9 +209,13 @@ def main() -> None:
         preferred_zones=zones,
         hostel_required=hostel_required,
         max_results=max_results,
-        include_rag_summary=include_rag_summary,
+        include_rag_summary=True,
+        include_public_signals=include_public_signals,
     )
-    response = backend.recommend(request)
+
+    with st.spinner("Finding best-fit colleges..."):
+        response = _sync_recommend(backend, request)
+
     items = _normalize_items(response)
 
     st.success(f"Generated {len(items)} ranked college recommendations.")

@@ -33,7 +33,9 @@ class AppSettings(BaseSettings):
     )
 
     app_name: str = "College Admission Assistant RAG"
+    app_version: str = "1.0.0"
     environment: str = "development"
+    log_level: str = "INFO"
 
     cache_ttl_seconds: int = 60 * 60 * 24
     request_timeout_seconds: float = 20.0
@@ -65,10 +67,14 @@ class AppSettings(BaseSettings):
 
     chroma_collection_name: str = "official_documents"
     chroma_persist_dir: str = "data/chroma"
+    index_schema_version: str = "1.0.0"
 
     source_manifest_dir: str = "sources/colleges"
     eval_dataset_path: str = "evals/golden_queries.jsonl"
     eval_report_dir: str = "evals/reports"
+
+    tracing_enabled: bool = False
+    metrics_enabled: bool = False
 
     @property
     def retrieval_config(self) -> dict:
