@@ -1,0 +1,17 @@
+﻿college_name: BITS Pilani
+allowed_domains:
+  - www.bits-pilani.ac.in
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://www.bits-pilani.ac.in/admissions/
+  - https://www.bits-pilani.ac.in/fee-structure/
+  - https://www.bits-pilani.ac.in/practice-school/placements/
+  - https://www.bits-pilani.ac.in/campus-life/
+  - https://www.bits-pilani.ac.in/academics/
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics

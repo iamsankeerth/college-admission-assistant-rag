@@ -1,0 +1,17 @@
+﻿college_name: NIT Trichy
+allowed_domains:
+  - www.nitt.edu
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://www.nitt.edu/home/academics/admissions/
+  - https://www.nitt.edu/home/academics/fees/
+  - https://www.nitt.edu/home/students/facilitiesnservices/tpo/
+  - https://www.nitt.edu/home/students/facilitiesnservices/hostelsnmess/
+  - https://www.nitt.edu/home/academics/
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics

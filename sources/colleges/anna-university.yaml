@@ -1,0 +1,17 @@
+﻿college_name: Anna University
+allowed_domains:
+  - www.annauniv.edu
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://www.annauniv.edu/admissions/
+  - https://www.annauniv.edu/fees/
+  - https://www.annauniv.edu/placement/
+  - https://www.annauniv.edu/campuslife/
+  - https://www.annauniv.edu/academics/
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics

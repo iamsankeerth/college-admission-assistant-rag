@@ -1,0 +1,18 @@
+﻿college_name: NIT Warangal
+allowed_domains:
+  - www.nitw.ac.in
+  - nitw.ac.in
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://www.nitw.ac.in/main/admissions/
+  - https://www.nitw.ac.in/main/fee-structure/
+  - https://nitw.ac.in/CareerCentre/
+  - https://www.nitw.ac.in/main/hostels/
+  - https://www.nitw.ac.in/main/academics/
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics

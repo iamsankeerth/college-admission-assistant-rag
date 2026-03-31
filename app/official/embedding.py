@@ -2,42 +2,31 @@ from __future__ import annotations
 
 import hashlib
 import math
+from typing import Protocol
+
+from app.config import settings
 
 
-class HashEmbeddingFunction:
-    """Deterministic lightweight embedding fallback for local development.
+class EmbeddingModel(Protocol):
+    def embed_documents(self, texts: list[str]) -> list[list[float]]: ...
+    def embed_query(self, text: str) -> list[float]: ...
+    def name(self) -> str: ...
 
-    This keeps the vector store fully operational without requiring a large
-    transformer model download. The interface is compatible with Chroma.
-    """
+
+class HashEmbeddingModel:
+    """Deterministic fallback used for local tests or offline environments."""
 
     def __init__(self, dimension: int = 256) -> None:
         self.dimension = dimension
 
-    def __call__(self, input: list[str]) -> list[list[float]]:
-        return [self._embed(text) for text in input]
-
-    def name(self=None) -> str:
+    def name(self) -> str:
         return "hash-embedding"
 
-    def embed_documents(self, input: list[str]) -> list[list[float]]:
-        return self.__call__(input)
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        return [self._embed(text) for text in texts]
 
-    def embed_query(self, input: list[str]) -> list[list[float]]:
-        return self.__call__(input)
-
-    def is_legacy(self) -> bool:
-        return False
-
-    def supported_spaces(self) -> list[str]:
-        return ["cosine", "l2", "ip"]
-
-    def get_config(self) -> dict[str, int | str]:
-        return {"name": self.name(), "dimension": self.dimension}
-
-    @classmethod
-    def build_from_config(cls, config: dict) -> "HashEmbeddingFunction":
-        return cls(dimension=int(config.get("dimension", 256)))
+    def embed_query(self, text: str) -> list[float]:
+        return self._embed(text)
 
     def _embed(self, text: str) -> list[float]:
         vector = [0.0] * self.dimension
@@ -48,3 +37,33 @@ class HashEmbeddingFunction:
             vector[idx] += sign
         norm = math.sqrt(sum(value * value for value in vector)) or 1.0
         return [value / norm for value in vector]
+
+
+class SentenceTransformerEmbeddingModel:
+    def __init__(self, model_name: str) -> None:
+        from sentence_transformers import SentenceTransformer
+
+        self.model_name = model_name
+        self.model = SentenceTransformer(model_name)
+
+    def name(self) -> str:
+        return self.model_name
+
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        embeddings = self.model.encode(texts, normalize_embeddings=True)
+        return [embedding.tolist() for embedding in embeddings]
+
+    def embed_query(self, text: str) -> list[float]:
+        embedding = self.model.encode([text], normalize_embeddings=True)[0]
+        return embedding.tolist()
+
+
+def build_embedding_model() -> EmbeddingModel:
+    backend = settings.embedding_backend.lower()
+    if backend == "hash":
+        return HashEmbeddingModel()
+
+    try:
+        return SentenceTransformerEmbeddingModel(settings.embedding_model_name)
+    except Exception:
+        return HashEmbeddingModel()

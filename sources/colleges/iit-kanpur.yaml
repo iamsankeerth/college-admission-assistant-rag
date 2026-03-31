@@ -1,0 +1,18 @@
+﻿college_name: IIT Kanpur
+allowed_domains:
+  - www.iitk.ac.in
+  - spo.iitk.ac.in
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://www.iitk.ac.in/new/admissions
+  - https://www.iitk.ac.in/doaa/data/Fee-Structure
+  - https://spo.iitk.ac.in/
+  - https://www.iitk.ac.in/new/campus-life
+  - https://www.iitk.ac.in/doaa/
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics

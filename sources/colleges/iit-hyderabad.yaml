@@ -1,0 +1,18 @@
+﻿college_name: IIT Hyderabad
+allowed_domains:
+  - www.iith.ac.in
+  - cds.iith.ac.in
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://www.iith.ac.in/academics/admissions/
+  - https://www.iith.ac.in/academics/fee-structure/
+  - https://cds.iith.ac.in/
+  - https://www.iith.ac.in/campus-life/hostel/
+  - https://www.iith.ac.in/academics/
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics

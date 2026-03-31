@@ -1,0 +1,18 @@
+﻿college_name: IIT Bombay
+allowed_domains:
+  - www.iitb.ac.in
+  - campus.placements.iitb.ac.in
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://www.iitb.ac.in/newacadhome/academics.jsp
+  - https://www.iitb.ac.in/en/education/fees
+  - https://campus.placements.iitb.ac.in/
+  - https://www.iitb.ac.in/en/life-iitb/hostels
+  - https://www.iitb.ac.in/en/education/academics
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics

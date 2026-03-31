@@ -8,24 +8,52 @@ import re
 
 
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
+SENTENCE_PATTERN = re.compile(r"(?<=[.!?])\s+")
 
 
 def tokenize(text: str) -> list[str]:
     return TOKEN_PATTERN.findall(text.lower())
 
 
-def chunk_text(text: str, chunk_size: int = 120, overlap: int = 25) -> list[str]:
-    words = text.split()
-    if not words:
+def split_sentences(text: str) -> list[str]:
+    if not text.strip():
         return []
+    return [sentence.strip() for sentence in SENTENCE_PATTERN.split(text.strip()) if sentence.strip()]
+
+
+def chunk_text(text: str, chunk_size: int = 650, overlap: int = 120) -> list[str]:
+    sentences = split_sentences(text)
+    if not sentences:
+        return []
+
     chunks: list[str] = []
-    start = 0
-    while start < len(words):
-        end = min(start + chunk_size, len(words))
-        chunks.append(" ".join(words[start:end]).strip())
-        if end >= len(words):
-            break
-        start = max(end - overlap, start + 1)
+    current_sentences: list[str] = []
+    current_tokens = 0
+
+    for sentence in sentences:
+        sentence_tokens = tokenize(sentence)
+        if not sentence_tokens:
+            continue
+
+        if current_sentences and current_tokens + len(sentence_tokens) > chunk_size:
+            chunks.append(" ".join(current_sentences).strip())
+            overlap_sentences: list[str] = []
+            overlap_tokens = 0
+            for existing in reversed(current_sentences):
+                existing_tokens = len(tokenize(existing))
+                overlap_sentences.insert(0, existing)
+                overlap_tokens += existing_tokens
+                if overlap_tokens >= overlap:
+                    break
+            current_sentences = overlap_sentences[:]
+            current_tokens = overlap_tokens
+
+        current_sentences.append(sentence)
+        current_tokens += len(sentence_tokens)
+
+    if current_sentences:
+        chunks.append(" ".join(current_sentences).strip())
+
     return chunks
 
 
@@ -78,7 +106,7 @@ class OfficialCorpus:
     def _read_document_file(self, path: Path) -> list[OfficialDocument]:
         if not path.exists():
             return []
-        raw = json.loads(path.read_text(encoding="utf-8"))
+        raw = json.loads(path.read_text(encoding="utf-8-sig"))
         documents: list[OfficialDocument] = []
         for item in raw:
             published = item.get("published_at")

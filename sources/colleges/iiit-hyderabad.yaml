@@ -1,0 +1,17 @@
+﻿college_name: IIIT Hyderabad
+allowed_domains:
+  - www.iiit.ac.in
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://www.iiit.ac.in/admissions/
+  - https://www.iiit.ac.in/admissions/fee-structure/
+  - https://www.iiit.ac.in/careers/placements/
+  - https://www.iiit.ac.in/life-at-iiith/
+  - https://www.iiit.ac.in/academics/
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics

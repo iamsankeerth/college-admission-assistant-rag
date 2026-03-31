@@ -1,0 +1,17 @@
+﻿college_name: Jadavpur University
+allowed_domains:
+  - jadavpuruniversity.in
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://jadavpuruniversity.in/admission/
+  - https://jadavpuruniversity.in/fees/
+  - https://jadavpuruniversity.in/placement/
+  - https://jadavpuruniversity.in/campus-life/
+  - https://jadavpuruniversity.in/academics/
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics

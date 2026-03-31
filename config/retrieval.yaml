@@ -1,0 +1,5 @@
+version: 1
+lexical_top_k: 10
+vector_top_k: 10
+rerank_top_k: 5
+min_rerank_score_to_answer: 0.1

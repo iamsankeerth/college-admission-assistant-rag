@@ -1,74 +1,602 @@
-[
-  {
-    "doc_id": "iith-admissions",
-    "college_name": "IIT Hyderabad",
-    "title": "IIT Hyderabad Admissions",
-    "url": "https://www.iith.ac.in/academics/admissions/",
-    "published_at": "2026-01-01T00:00:00Z",
-    "content": "The IIT Hyderabad admissions page explains that undergraduate admissions are handled through national counselling processes such as JoSAA and CSAB. Candidates should rely on official counselling schedules, eligibility rules, seat matrix updates, and institute notices for the current admission cycle."
-  },
-  {
-    "doc_id": "iith-fees",
-    "college_name": "IIT Hyderabad",
-    "title": "IIT Hyderabad Fee Structure",
-    "url": "https://www.iith.ac.in/academics/fee-structure/",
-    "published_at": "2026-01-05T00:00:00Z",
-    "content": "The official IIT Hyderabad fee structure page describes tuition and institute fees, while separate notices may explain hostel, mess, caution deposit, and refund policies. Students should always verify the latest PDF or circular before making budget decisions."
-  },
-  {
-    "doc_id": "iith-placement",
-    "college_name": "IIT Hyderabad",
-    "title": "IIT Hyderabad Career Development Services",
-    "url": "https://cds.iith.ac.in/",
-    "published_at": "2026-01-10T00:00:00Z",
-    "content": "The Career Development Services portal highlights training, internships, placement coordination, recruiter engagement, and career support. Official placement details should come from the institute placement office and authenticated reports rather than rumors or unaudited social posts."
-  },
-  {
-    "doc_id": "iith-hostel",
-    "college_name": "IIT Hyderabad",
-    "title": "IIT Hyderabad Hostel and Student Life",
-    "url": "https://www.iith.ac.in/campus-life/hostel/",
-    "published_at": "2026-01-12T00:00:00Z",
-    "content": "The institute hostel page provides official information on residence facilities, student amenities, mess operations, and campus life resources. Hostel experience can vary from student to student, so public commentary should be treated as advisory and not as a substitute for official hostel policies."
-  },
-  {
-    "doc_id": "iith-academics",
-    "college_name": "IIT Hyderabad",
-    "title": "IIT Hyderabad Academics",
-    "url": "https://www.iith.ac.in/academics/",
-    "published_at": "2026-01-08T00:00:00Z",
-    "content": "The academics section describes departments, curriculum, research focus, regulations, and academic processes. Students should consult the institute curriculum, senate rules, and departmental pages for the latest academic information."
-  },
-  {
-    "doc_id": "nittrichy-admissions",
-    "college_name": "NIT Trichy",
-    "title": "NIT Trichy Admissions",
-    "url": "https://www.nitt.edu/home/academics/admissions/",
-    "published_at": "2026-01-01T00:00:00Z",
-    "content": "The NIT Trichy admissions page explains that undergraduate seats are allotted through JoSAA and CSAB according to current counselling rules, eligibility criteria, and reservation policy. Applicants should verify programme-specific notices and official documents for the latest cycle."
-  },
-  {
-    "doc_id": "nittrichy-fees",
-    "college_name": "NIT Trichy",
-    "title": "NIT Trichy Fees and Payments",
-    "url": "https://www.nitt.edu/home/academics/fees/",
-    "published_at": "2026-01-03T00:00:00Z",
-    "content": "The institute fee page lists tuition, student activity, hostel, and mess related fee components. Budget planning should use official fee notices and not rely only on third-party summaries."
-  },
-  {
-    "doc_id": "bits-admissions",
-    "college_name": "BITS Pilani",
-    "title": "BITS Pilani Admissions",
-    "url": "https://www.bits-pilani.ac.in/admissions/",
-    "published_at": "2026-01-02T00:00:00Z",
-    "content": "The official BITS Pilani admissions page explains admission pathways, application instructions, and campus-specific notices. Applicants should use authenticated admission bulletins and campus announcements for current information."
-  },
-  {
-    "doc_id": "bits-campus",
-    "college_name": "BITS Pilani",
-    "title": "BITS Pilani Campus Life",
-    "url": "https://www.bits-pilani.ac.in/campuslife/",
-    "published_at": "2026-01-06T00:00:00Z",
-    "content": "The campus life pages describe student activities, clubs, infrastructure, housing, and support systems. Personal experience may differ, so student commentary should be used as context alongside official campus information."
-  }
+﻿[
+    {
+        "doc_id":  "iith-admissions",
+        "college_name":  "IIT Hyderabad",
+        "title":  "IIT Hyderabad Admissions",
+        "url":  "https://www.iith.ac.in/academics/admissions/",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The IIT Hyderabad admissions page explains that undergraduate admissions are handled through JoSAA and CSAB counselling for the current cycle, with institute notices clarifying eligibility, seat matrix updates, and reporting steps."
+    },
+    {
+        "doc_id":  "iith-fees",
+        "college_name":  "IIT Hyderabad",
+        "title":  "IIT Hyderabad Fee Structure",
+        "url":  "https://www.iith.ac.in/academics/fee-structure/",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The IIT Hyderabad fee structure pages describe tuition, institute charges, and separate hostel or mess notices. Applicants should use the latest official PDF or circular for exact payable amounts and refund rules."
+    },
+    {
+        "doc_id":  "iith-placements",
+        "college_name":  "IIT Hyderabad",
+        "title":  "IIT Hyderabad Placements and Career Services",
+        "url":  "https://cds.iith.ac.in/",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The IIT Hyderabad Career Development Services portal highlights internships, recruiter engagement, placement coordination, and official career support. Placement claims should come from authenticated institute reports rather than informal posts."
+    },
+    {
+        "doc_id":  "iith-campus",
+        "college_name":  "IIT Hyderabad",
+        "title":  "IIT Hyderabad Campus Life and Hostels",
+        "url":  "https://www.iith.ac.in/campus-life/hostel/",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The IIT Hyderabad hostel and campus life pages describe residence facilities, student amenities, mess operations, wellness support, and campus resources. Official hostel policies should be checked before relying on student anecdotes."
+    },
+    {
+        "doc_id":  "iith-academics",
+        "college_name":  "IIT Hyderabad",
+        "title":  "IIT Hyderabad Academics",
+        "url":  "https://www.iith.ac.in/academics/",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The IIT Hyderabad academics pages describe departments, curriculum, academic regulations, and senate-governed processes. Students should consult the latest departmental and senate material for programme requirements."
+    },
+    {
+        "doc_id":  "iitb-admissions",
+        "college_name":  "IIT Bombay",
+        "title":  "IIT Bombay Admissions",
+        "url":  "https://www.iitb.ac.in/newacadhome/academics.jsp",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The IIT Bombay academics and admissions information explains that undergraduate entry is tied to national counselling processes such as JoSAA, along with institute-specific notices and reporting instructions."
+    },
+    {
+        "doc_id":  "iitb-fees",
+        "college_name":  "IIT Bombay",
+        "title":  "IIT Bombay Fee Structure",
+        "url":  "https://www.iitb.ac.in/en/education/fees",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The IIT Bombay fees pages outline tuition, hostel, mess, deposits, and other institute charges. Official fee notices should be treated as the source of truth for payment and refund timelines."
+    },
+    {
+        "doc_id":  "iitb-placements",
+        "college_name":  "IIT Bombay",
+        "title":  "IIT Bombay Placements and Career Services",
+        "url":  "https://campus.placements.iitb.ac.in/",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The IIT Bombay placement portal describes internship and placement activities, recruiter participation, and institute placement support. Verified placement outcomes should come from official placement communications."
+    },
+    {
+        "doc_id":  "iitb-campus",
+        "college_name":  "IIT Bombay",
+        "title":  "IIT Bombay Campus Life and Hostels",
+        "url":  "https://www.iitb.ac.in/en/life-iitb/hostels",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The IIT Bombay hostel and student life pages describe residence halls, facilities, student activities, and support services. Students should rely on hostel office policies for operational details."
+    },
+    {
+        "doc_id":  "iitb-academics",
+        "college_name":  "IIT Bombay",
+        "title":  "IIT Bombay Academics",
+        "url":  "https://www.iitb.ac.in/en/education/academics",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The IIT Bombay academics pages cover programmes, curricula, regulations, and academic structure. The latest institute and departmental rules should be checked for updated academic requirements."
+    },
+    {
+        "doc_id":  "iitd-admissions",
+        "college_name":  "IIT Delhi",
+        "title":  "IIT Delhi Admissions",
+        "url":  "https://home.iitd.ac.in/admission.php",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The IIT Delhi admission information explains that undergraduate admissions depend on current counselling rules, institute instructions, and official reporting requirements for the active cycle."
+    },
+    {
+        "doc_id":  "iitd-fees",
+        "college_name":  "IIT Delhi",
+        "title":  "IIT Delhi Fee Structure",
+        "url":  "https://home.iitd.ac.in/fee.php",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The IIT Delhi fee information covers tuition, institute fees, hostel components, and deposits. Candidates should confirm the latest official fee notification before budgeting."
+    },
+    {
+        "doc_id":  "iitd-placements",
+        "college_name":  "IIT Delhi",
+        "title":  "IIT Delhi Placements and Career Services",
+        "url":  "https://tnp.iitd.ac.in/",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The IIT Delhi Training and Placement resources describe recruiter engagement, internship support, and placement process guidance. Formal placement data should be sourced from institute publications."
+    },
+    {
+        "doc_id":  "iitd-campus",
+        "college_name":  "IIT Delhi",
+        "title":  "IIT Delhi Campus Life and Hostels",
+        "url":  "https://home.iitd.ac.in/campus-life.php",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The IIT Delhi campus life pages describe hostels, student facilities, clubs, and support resources. Operational hostel details should be verified on official notices."
+    },
+    {
+        "doc_id":  "iitd-academics",
+        "college_name":  "IIT Delhi",
+        "title":  "IIT Delhi Academics",
+        "url":  "https://home.iitd.ac.in/academics.php",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The IIT Delhi academics pages describe departments, regulations, curricula, and academic calendars. Students should rely on current official regulations for academic planning."
+    },
+    {
+        "doc_id":  "iitm-admissions",
+        "college_name":  "IIT Madras",
+        "title":  "IIT Madras Admissions",
+        "url":  "https://www.iitm.ac.in/academics/admissions",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The IIT Madras admissions pages explain that undergraduate seats are allocated through current national counselling mechanisms together with institute-specific guidance and reporting instructions."
+    },
+    {
+        "doc_id":  "iitm-fees",
+        "college_name":  "IIT Madras",
+        "title":  "IIT Madras Fee Structure",
+        "url":  "https://www.iitm.ac.in/academics/academic-fees",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The IIT Madras academic fees pages list tuition, institute, hostel, and mess components, while separate notices clarify payment windows and revisions. Official fee notices should be used for exact amounts."
+    },
+    {
+        "doc_id":  "iitm-placements",
+        "college_name":  "IIT Madras",
+        "title":  "IIT Madras Placements and Career Services",
+        "url":  "https://careerservices.iitm.ac.in/",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The IIT Madras career services pages describe internships, employer outreach, and official placement support. Any placement statistics should be checked against authenticated institute releases."
+    },
+    {
+        "doc_id":  "iitm-campus",
+        "college_name":  "IIT Madras",
+        "title":  "IIT Madras Campus Life and Hostels",
+        "url":  "https://www.iitm.ac.in/campus-life/hostel-life",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The IIT Madras hostel life pages describe residence facilities, student support, dining, and campus services. Official hostel communication should guide practical decisions."
+    },
+    {
+        "doc_id":  "iitm-academics",
+        "college_name":  "IIT Madras",
+        "title":  "IIT Madras Academics",
+        "url":  "https://www.iitm.ac.in/academics/overview",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The IIT Madras academics overview describes programmes, departments, regulations, and academic processes. Students should use official curriculum and regulation pages for current rules."
+    },
+    {
+        "doc_id":  "iitk-admissions",
+        "college_name":  "IIT Kanpur",
+        "title":  "IIT Kanpur Admissions",
+        "url":  "https://www.iitk.ac.in/new/admissions",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The IIT Kanpur admissions information explains that undergraduate admission follows current JoSAA and institute processes, with official notices covering reporting and eligibility requirements."
+    },
+    {
+        "doc_id":  "iitk-fees",
+        "college_name":  "IIT Kanpur",
+        "title":  "IIT Kanpur Fee Structure",
+        "url":  "https://www.iitk.ac.in/doaa/data/Fee-Structure",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The IIT Kanpur fee structure resources describe tuition, hostel, mess, and caution deposit components. Students should follow the latest official fee circular for actual payable amounts."
+    },
+    {
+        "doc_id":  "iitk-placements",
+        "college_name":  "IIT Kanpur",
+        "title":  "IIT Kanpur Placements and Career Services",
+        "url":  "https://spo.iitk.ac.in/",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The IIT Kanpur Students Placement Office pages explain internships, placement process support, and recruiter engagement. Placement outcomes should be drawn from official office material."
+    },
+    {
+        "doc_id":  "iitk-campus",
+        "college_name":  "IIT Kanpur",
+        "title":  "IIT Kanpur Campus Life and Hostels",
+        "url":  "https://www.iitk.ac.in/new/campus-life",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The IIT Kanpur campus life pages describe residence options, student facilities, clubs, and support resources. Hostel operational details should be verified with official notices."
+    },
+    {
+        "doc_id":  "iitk-academics",
+        "college_name":  "IIT Kanpur",
+        "title":  "IIT Kanpur Academics",
+        "url":  "https://www.iitk.ac.in/doaa/",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The IIT Kanpur academic affairs resources cover programmes, rules, calendars, and curriculum administration. Current academic decisions should be based on official academic affairs documents."
+    },
+    {
+        "doc_id":  "nitt-admissions",
+        "college_name":  "NIT Trichy",
+        "title":  "NIT Trichy Admissions",
+        "url":  "https://www.nitt.edu/home/academics/admissions/",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The NIT Trichy admissions page explains that undergraduate seats are allotted through JoSAA and CSAB according to current counselling rules, reservation policy, and institute notices."
+    },
+    {
+        "doc_id":  "nitt-fees",
+        "college_name":  "NIT Trichy",
+        "title":  "NIT Trichy Fee Structure",
+        "url":  "https://www.nitt.edu/home/academics/fees/",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The NIT Trichy fees pages list tuition, institute, hostel, and mess-related components. Budget planning should use official fee notices rather than third-party summaries."
+    },
+    {
+        "doc_id":  "nitt-placements",
+        "college_name":  "NIT Trichy",
+        "title":  "NIT Trichy Placements and Career Services",
+        "url":  "https://www.nitt.edu/home/students/facilitiesnservices/tpo/",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The NIT Trichy training and placement resources describe placement coordination, recruiter outreach, and student support. Placement claims should be checked against official institute releases."
+    },
+    {
+        "doc_id":  "nitt-campus",
+        "college_name":  "NIT Trichy",
+        "title":  "NIT Trichy Campus Life and Hostels",
+        "url":  "https://www.nitt.edu/home/students/facilitiesnservices/hostelsnmess/",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The NIT Trichy hostel and mess pages describe residence facilities, boarding, student services, and operational guidance. Official hostel information should guide practical expectations."
+    },
+    {
+        "doc_id":  "nitt-academics",
+        "college_name":  "NIT Trichy",
+        "title":  "NIT Trichy Academics",
+        "url":  "https://www.nitt.edu/home/academics/",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The NIT Trichy academics pages describe departments, programmes, rules, and curricular processes. Students should refer to official academic sections for current regulations."
+    },
+    {
+        "doc_id":  "nitk-admissions",
+        "college_name":  "NIT Surathkal",
+        "title":  "NIT Surathkal Admissions",
+        "url":  "https://www.nitk.ac.in/admissions",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The NIT Surathkal admissions resources explain that undergraduate admission follows the current national counselling process along with institute-level updates and reporting instructions."
+    },
+    {
+        "doc_id":  "nitk-fees",
+        "college_name":  "NIT Surathkal",
+        "title":  "NIT Surathkal Fee Structure",
+        "url":  "https://www.nitk.ac.in/fees",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The NIT Surathkal fees pages cover tuition, institute charges, hostel, and mess fee components. Official fee documents should be used when planning expenses."
+    },
+    {
+        "doc_id":  "nitk-placements",
+        "college_name":  "NIT Surathkal",
+        "title":  "NIT Surathkal Placements and Career Services",
+        "url":  "https://www.nitk.ac.in/placement",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The NIT Surathkal placement resources describe recruiter interaction, internships, and official placement support. Verified placement details should come from institute communications."
+    },
+    {
+        "doc_id":  "nitk-campus",
+        "college_name":  "NIT Surathkal",
+        "title":  "NIT Surathkal Campus Life and Hostels",
+        "url":  "https://www.nitk.ac.in/hostels",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The NIT Surathkal hostel pages describe residence infrastructure, student amenities, and support services. Hostel rules and notices should be checked officially."
+    },
+    {
+        "doc_id":  "nitk-academics",
+        "college_name":  "NIT Surathkal",
+        "title":  "NIT Surathkal Academics",
+        "url":  "https://www.nitk.ac.in/academics",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The NIT Surathkal academics pages describe programmes, regulations, and departments. Students should use current institute regulations and academic notices."
+    },
+    {
+        "doc_id":  "nitw-admissions",
+        "college_name":  "NIT Warangal",
+        "title":  "NIT Warangal Admissions",
+        "url":  "https://www.nitw.ac.in/main/admissions/",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The NIT Warangal admissions pages explain that undergraduate admission uses prevailing JoSAA and CSAB processes, together with institute notices and reporting instructions."
+    },
+    {
+        "doc_id":  "nitw-fees",
+        "college_name":  "NIT Warangal",
+        "title":  "NIT Warangal Fee Structure",
+        "url":  "https://www.nitw.ac.in/main/fee-structure/",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The NIT Warangal fee structure pages describe tuition, hostel, mess, and other institute charges. Students should consult the latest official fee structure before making payment decisions."
+    },
+    {
+        "doc_id":  "nitw-placements",
+        "college_name":  "NIT Warangal",
+        "title":  "NIT Warangal Placements and Career Services",
+        "url":  "https://nitw.ac.in/CareerCentre/",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The NIT Warangal career centre pages describe training, internships, placement support, and employer engagement. Placement outcomes should be checked from official career centre publications."
+    },
+    {
+        "doc_id":  "nitw-campus",
+        "college_name":  "NIT Warangal",
+        "title":  "NIT Warangal Campus Life and Hostels",
+        "url":  "https://www.nitw.ac.in/main/hostels/",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The NIT Warangal hostel pages describe residence facilities, mess operations, and campus services. Operational expectations should be confirmed through official hostel notices."
+    },
+    {
+        "doc_id":  "nitw-academics",
+        "college_name":  "NIT Warangal",
+        "title":  "NIT Warangal Academics",
+        "url":  "https://www.nitw.ac.in/main/academics/",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The NIT Warangal academics pages describe departments, curricula, and academic regulations. Current programme planning should rely on official academic publications."
+    },
+    {
+        "doc_id":  "bits-admissions",
+        "college_name":  "BITS Pilani",
+        "title":  "BITS Pilani Admissions",
+        "url":  "https://www.bits-pilani.ac.in/admissions/",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The BITS Pilani admissions pages explain application pathways, BITSAT-linked processes, and campus-specific notices. Applicants should use official admission bulletins and current instructions for the active cycle."
+    },
+    {
+        "doc_id":  "bits-fees",
+        "college_name":  "BITS Pilani",
+        "title":  "BITS Pilani Fee Structure",
+        "url":  "https://www.bits-pilani.ac.in/fee-structure/",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The BITS Pilani fee structure pages list tuition, hostel, mess, and related institute charges. Students should confirm the latest official fee notification for exact payment obligations."
+    },
+    {
+        "doc_id":  "bits-placements",
+        "college_name":  "BITS Pilani",
+        "title":  "BITS Pilani Placements and Career Services",
+        "url":  "https://www.bits-pilani.ac.in/practice-school/placements/",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The BITS Pilani placements and practice school pages describe internships, industry engagement, and official career pathways. Verified placement claims should come from institute publications."
+    },
+    {
+        "doc_id":  "bits-campus",
+        "college_name":  "BITS Pilani",
+        "title":  "BITS Pilani Campus Life and Hostels",
+        "url":  "https://www.bits-pilani.ac.in/campus-life/",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The BITS Pilani campus life pages describe housing, clubs, infrastructure, and student support systems. Official hostel and student affairs communication should guide practical expectations."
+    },
+    {
+        "doc_id":  "bits-academics",
+        "college_name":  "BITS Pilani",
+        "title":  "BITS Pilani Academics",
+        "url":  "https://www.bits-pilani.ac.in/academics/",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The BITS Pilani academics pages describe programmes, regulations, and academic systems across campuses. Students should consult the latest academic bulletins and handbooks."
+    },
+    {
+        "doc_id":  "vit-admissions",
+        "college_name":  "VIT Vellore",
+        "title":  "VIT Vellore Admissions",
+        "url":  "https://vit.ac.in/admissions/",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The VIT admissions pages explain application and counselling guidance connected to VITEEE and official university instructions. Applicants should rely on the current official bulletin for deadlines and eligibility."
+    },
+    {
+        "doc_id":  "vit-fees",
+        "college_name":  "VIT Vellore",
+        "title":  "VIT Vellore Fee Structure",
+        "url":  "https://vit.ac.in/fee-structure/",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The VIT fee structure pages describe tuition, hostel, mess, and category-specific fee information. The official fee schedule should be checked for exact payment commitments."
+    },
+    {
+        "doc_id":  "vit-placements",
+        "college_name":  "VIT Vellore",
+        "title":  "VIT Vellore Placements and Career Services",
+        "url":  "https://vit.ac.in/career-development-centre/",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The VIT Career Development Centre pages describe placement preparation, recruiter engagement, and official placement support. Placement outcomes should be sourced from university publications."
+    },
+    {
+        "doc_id":  "vit-campus",
+        "college_name":  "VIT Vellore",
+        "title":  "VIT Vellore Campus Life and Hostels",
+        "url":  "https://vit.ac.in/campus-life/",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The VIT campus life pages describe hostel facilities, student life, clubs, and campus services. Official hostel office communication should be used for operational details."
+    },
+    {
+        "doc_id":  "vit-academics",
+        "college_name":  "VIT Vellore",
+        "title":  "VIT Vellore Academics",
+        "url":  "https://vit.ac.in/academics/",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The VIT academics pages describe schools, curriculum, and academic processes. Students should use the latest university academic information for planning."
+    },
+    {
+        "doc_id":  "iiith-admissions",
+        "college_name":  "IIIT Hyderabad",
+        "title":  "IIIT Hyderabad Admissions",
+        "url":  "https://www.iiit.ac.in/admissions/",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The IIIT Hyderabad admissions pages describe admission routes such as current entrance-based pathways and official institute instructions. Applicants should follow the latest programme-specific admission notice."
+    },
+    {
+        "doc_id":  "iiith-fees",
+        "college_name":  "IIIT Hyderabad",
+        "title":  "IIIT Hyderabad Fee Structure",
+        "url":  "https://www.iiit.ac.in/admissions/fee-structure/",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The IIIT Hyderabad fee structure pages describe tuition, hostel, and institute costs, along with official policy notes for payment. Students should verify the latest published fee schedule."
+    },
+    {
+        "doc_id":  "iiith-placements",
+        "college_name":  "IIIT Hyderabad",
+        "title":  "IIIT Hyderabad Placements and Career Services",
+        "url":  "https://www.iiit.ac.in/careers/placements/",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The IIIT Hyderabad placement pages describe recruiter engagement, internships, and official placement support. Placement outcomes should be checked through institute-released material."
+    },
+    {
+        "doc_id":  "iiith-campus",
+        "college_name":  "IIIT Hyderabad",
+        "title":  "IIIT Hyderabad Campus Life and Hostels",
+        "url":  "https://www.iiit.ac.in/life-at-iiith/",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The IIIT Hyderabad life-at-campus pages describe hostels, student experience, facilities, and support services. Official campus guidance should be used for operational details."
+    },
+    {
+        "doc_id":  "iiith-academics",
+        "college_name":  "IIIT Hyderabad",
+        "title":  "IIIT Hyderabad Academics",
+        "url":  "https://www.iiit.ac.in/academics/",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The IIIT Hyderabad academics pages describe programmes, curriculum, and research-oriented academic structure. Current academic requirements should be verified on official programme pages."
+    },
+    {
+        "doc_id":  "dtu-admissions",
+        "college_name":  "Delhi Technological University",
+        "title":  "Delhi Technological University Admissions",
+        "url":  "https://dtu.ac.in/Web/Admissions.php",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The Delhi Technological University admissions pages explain admission updates tied to current counselling frameworks such as JAC Delhi and official university instructions. Students should rely on official admission notices for the active session."
+    },
+    {
+        "doc_id":  "dtu-fees",
+        "college_name":  "Delhi Technological University",
+        "title":  "Delhi Technological University Fee Structure",
+        "url":  "https://dtu.ac.in/Web/feeStructure.php",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The DTU fee structure pages describe tuition, hostel, and related student charges. The official fee structure should be used for exact and current payable amounts."
+    },
+    {
+        "doc_id":  "dtu-placements",
+        "college_name":  "Delhi Technological University",
+        "title":  "Delhi Technological University Placements and Career Services",
+        "url":  "https://dtu.ac.in/Web/placement.php",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The DTU placement pages describe training, recruiter interaction, and campus placement support. Placement claims should come from official placement cell publications."
+    },
+    {
+        "doc_id":  "dtu-campus",
+        "college_name":  "Delhi Technological University",
+        "title":  "Delhi Technological University Campus Life and Hostels",
+        "url":  "https://dtu.ac.in/Web/hostels.php",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The DTU hostel pages describe residence facilities, student amenities, and hostel administration guidance. Hostel policies should be checked through official notices."
+    },
+    {
+        "doc_id":  "dtu-academics",
+        "college_name":  "Delhi Technological University",
+        "title":  "Delhi Technological University Academics",
+        "url":  "https://dtu.ac.in/Web/Academics.php",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The DTU academics pages describe departments, programme structures, and academic regulations. Students should use official academic documents for current requirements."
+    },
+    {
+        "doc_id":  "nsut-admissions",
+        "college_name":  "Netaji Subhas University of Technology",
+        "title":  "Netaji Subhas University of Technology Admissions",
+        "url":  "https://www.nsut.ac.in/en/admissions",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The NSUT admissions pages explain university admission updates tied to the active counselling process and official notices. Applicants should follow official university instructions for current deadlines and reporting."
+    },
+    {
+        "doc_id":  "nsut-fees",
+        "college_name":  "Netaji Subhas University of Technology",
+        "title":  "Netaji Subhas University of Technology Fee Structure",
+        "url":  "https://www.nsut.ac.in/en/fees",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The NSUT fees pages describe tuition, hostel, and other institute charges. Students should verify the current official fee notice before planning payments."
+    },
+    {
+        "doc_id":  "nsut-placements",
+        "college_name":  "Netaji Subhas University of Technology",
+        "title":  "Netaji Subhas University of Technology Placements and Career Services",
+        "url":  "https://www.nsut.ac.in/en/placement",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The NSUT placement pages describe training, recruiter engagement, and placement support. Official placement publications should be used for verified placement information."
+    },
+    {
+        "doc_id":  "nsut-campus",
+        "college_name":  "Netaji Subhas University of Technology",
+        "title":  "Netaji Subhas University of Technology Campus Life and Hostels",
+        "url":  "https://www.nsut.ac.in/en/hostels",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The NSUT hostel pages describe residence facilities, amenities, and hostel administration. Official hostel notices should guide practical planning."
+    },
+    {
+        "doc_id":  "nsut-academics",
+        "college_name":  "Netaji Subhas University of Technology",
+        "title":  "Netaji Subhas University of Technology Academics",
+        "url":  "https://www.nsut.ac.in/en/academics",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The NSUT academics pages describe departments, courses, and academic procedures. Current academic requirements should be checked through university documents."
+    },
+    {
+        "doc_id":  "ju-admissions",
+        "college_name":  "Jadavpur University",
+        "title":  "Jadavpur University Admissions",
+        "url":  "https://jadavpuruniversity.in/admission/",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The Jadavpur University admission resources explain programme-wise admission procedures linked to current official counselling and university instructions. Applicants should follow official notices and merit procedures for the current cycle."
+    },
+    {
+        "doc_id":  "ju-fees",
+        "college_name":  "Jadavpur University",
+        "title":  "Jadavpur University Fee Structure",
+        "url":  "https://jadavpuruniversity.in/fees/",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The Jadavpur University fee pages describe tuition, caution money, and other official charges where applicable. Students should use current university fee notices for exact payable amounts."
+    },
+    {
+        "doc_id":  "ju-placements",
+        "college_name":  "Jadavpur University",
+        "title":  "Jadavpur University Placements and Career Services",
+        "url":  "https://jadavpuruniversity.in/placement/",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The Jadavpur University placement resources describe training, placement assistance, and official career support. Verified placement details should come from official university channels."
+    },
+    {
+        "doc_id":  "ju-campus",
+        "college_name":  "Jadavpur University",
+        "title":  "Jadavpur University Campus Life and Hostels",
+        "url":  "https://jadavpuruniversity.in/campus-life/",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The Jadavpur University campus life pages describe facilities, hostels, student support, and campus resources. Operational hostel matters should be confirmed with official notices."
+    },
+    {
+        "doc_id":  "ju-academics",
+        "college_name":  "Jadavpur University",
+        "title":  "Jadavpur University Academics",
+        "url":  "https://jadavpuruniversity.in/academics/",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The Jadavpur University academics pages describe departments, curriculum, and academic processes. Students should consult current university academic documentation for programme rules."
+    },
+    {
+        "doc_id":  "au-admissions",
+        "college_name":  "Anna University",
+        "title":  "Anna University Admissions",
+        "url":  "https://www.annauniv.edu/admissions/",
+        "published_at":  "2026-01-01T00:00:00Z",
+        "content":  "The Anna University admissions resources explain current admission pathways and counselling-linked instructions, including programme-specific guidance under official university procedures. Applicants should use the latest official admission communication."
+    },
+    {
+        "doc_id":  "au-fees",
+        "college_name":  "Anna University",
+        "title":  "Anna University Fee Structure",
+        "url":  "https://www.annauniv.edu/fees/",
+        "published_at":  "2026-01-03T00:00:00Z",
+        "content":  "The Anna University fees pages describe tuition and university charges, while separate notices can clarify hostel or related payments. Students should verify the official fee notice for exact amounts."
+    },
+    {
+        "doc_id":  "au-placements",
+        "college_name":  "Anna University",
+        "title":  "Anna University Placements and Career Services",
+        "url":  "https://www.annauniv.edu/placement/",
+        "published_at":  "2026-01-07T00:00:00Z",
+        "content":  "The Anna University placement resources describe official placement support, employer interaction, and career services. Placement data should come from official university sources."
+    },
+    {
+        "doc_id":  "au-campus",
+        "college_name":  "Anna University",
+        "title":  "Anna University Campus Life and Hostels",
+        "url":  "https://www.annauniv.edu/campuslife/",
+        "published_at":  "2026-01-10T00:00:00Z",
+        "content":  "The Anna University campus life pages describe hostel and student support facilities, campus services, and resources. Official notices should be followed for operational details."
+    },
+    {
+        "doc_id":  "au-academics",
+        "college_name":  "Anna University",
+        "title":  "Anna University Academics",
+        "url":  "https://www.annauniv.edu/academics/",
+        "published_at":  "2026-01-12T00:00:00Z",
+        "content":  "The Anna University academics pages describe schools, curriculum, and academic regulations. Students should rely on the latest official academic material for current rules."
+    }
 ]

@@ -1,0 +1,422 @@
+[
+  {
+    "college_name": "IIT Hyderabad",
+    "short_name": "IITH",
+    "category": "IIT",
+    "college_type": "Institute of National Importance",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "zone": "South",
+    "is_metro": true,
+    "hostel_available": true,
+    "campus_style": "residential",
+    "accepted_exams": ["JEE Advanced"],
+    "official_admissions_url": "https://www.iith.ac.in/academics/admissions/",
+    "annual_cost_lakh": {
+      "tuition": 2.35,
+      "hostel_mess": 0.92,
+      "other": 0.28,
+      "total": 3.55
+    },
+    "branches": [
+      {"name": "Computer Science and Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 930},
+      {"name": "Electrical Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 2030},
+      {"name": "Mechanical Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 4120},
+      {"name": "Civil Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 5750}
+    ],
+    "strength_tags": ["research", "ai", "placements", "residential"],
+    "notes": "Strong research culture, growing AI ecosystem, and residential campus."
+  },
+  {
+    "college_name": "IIT Bombay",
+    "short_name": "IITB",
+    "category": "IIT",
+    "college_type": "Institute of National Importance",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "zone": "West",
+    "is_metro": true,
+    "hostel_available": true,
+    "campus_style": "residential",
+    "accepted_exams": ["JEE Advanced"],
+    "official_admissions_url": "https://www.iitb.ac.in/newacadhome/academics.jsp",
+    "annual_cost_lakh": {
+      "tuition": 2.45,
+      "hostel_mess": 1.05,
+      "other": 0.35,
+      "total": 3.85
+    },
+    "branches": [
+      {"name": "Computer Science and Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 70},
+      {"name": "Electrical Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 500},
+      {"name": "Mechanical Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 1680},
+      {"name": "Civil Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 2500}
+    ],
+    "strength_tags": ["top_tier", "placements", "startup", "metro"],
+    "notes": "Elite brand, strong placements, startup ecosystem, and metro location."
+  },
+  {
+    "college_name": "IIT Delhi",
+    "short_name": "IITD",
+    "category": "IIT",
+    "college_type": "Institute of National Importance",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "zone": "North",
+    "is_metro": true,
+    "hostel_available": true,
+    "campus_style": "residential",
+    "accepted_exams": ["JEE Advanced"],
+    "official_admissions_url": "https://home.iitd.ac.in/admission.php",
+    "annual_cost_lakh": {
+      "tuition": 2.4,
+      "hostel_mess": 0.95,
+      "other": 0.32,
+      "total": 3.67
+    },
+    "branches": [
+      {"name": "Computer Science and Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 115},
+      {"name": "Electrical Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 620},
+      {"name": "Mechanical Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 1820},
+      {"name": "Civil Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 2750}
+    ],
+    "strength_tags": ["top_tier", "placements", "research", "metro"],
+    "notes": "High brand value, strong placement record, and access to Delhi opportunities."
+  },
+  {
+    "college_name": "IIT Madras",
+    "short_name": "IITM",
+    "category": "IIT",
+    "college_type": "Institute of National Importance",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "zone": "South",
+    "is_metro": true,
+    "hostel_available": true,
+    "campus_style": "residential",
+    "accepted_exams": ["JEE Advanced"],
+    "official_admissions_url": "https://www.iitm.ac.in/academics",
+    "annual_cost_lakh": {
+      "tuition": 2.35,
+      "hostel_mess": 0.88,
+      "other": 0.27,
+      "total": 3.5
+    },
+    "branches": [
+      {"name": "Computer Science and Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 175},
+      {"name": "Electrical Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 780},
+      {"name": "Mechanical Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 2350},
+      {"name": "Civil Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 3300}
+    ],
+    "strength_tags": ["research", "ai", "incubation", "south"],
+    "notes": "Strong research reputation, growing deep-tech ecosystem, and residential campus."
+  },
+  {
+    "college_name": "IIT Kanpur",
+    "short_name": "IITK",
+    "category": "IIT",
+    "college_type": "Institute of National Importance",
+    "city": "Kanpur",
+    "state": "Uttar Pradesh",
+    "zone": "North",
+    "is_metro": false,
+    "hostel_available": true,
+    "campus_style": "residential",
+    "accepted_exams": ["JEE Advanced"],
+    "official_admissions_url": "https://www.iitk.ac.in/academics",
+    "annual_cost_lakh": {
+      "tuition": 2.3,
+      "hostel_mess": 0.86,
+      "other": 0.24,
+      "total": 3.4
+    },
+    "branches": [
+      {"name": "Computer Science and Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 245},
+      {"name": "Electrical Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 980},
+      {"name": "Mechanical Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 2480},
+      {"name": "Civil Engineering", "exam": "JEE Advanced", "metric": "closing_rank", "value": 3600}
+    ],
+    "strength_tags": ["research", "core_engineering", "residential", "north"],
+    "notes": "Strong academic rigor and research profile, especially in core engineering."
+  },
+  {
+    "college_name": "NIT Trichy",
+    "short_name": "NITT",
+    "category": "NIT",
+    "college_type": "Institute of National Importance",
+    "city": "Tiruchirappalli",
+    "state": "Tamil Nadu",
+    "zone": "South",
+    "is_metro": false,
+    "hostel_available": true,
+    "campus_style": "residential",
+    "accepted_exams": ["JEE Main"],
+    "official_admissions_url": "https://www.nitt.edu/home/academics/admissions/",
+    "annual_cost_lakh": {
+      "tuition": 1.9,
+      "hostel_mess": 0.82,
+      "other": 0.2,
+      "total": 2.92
+    },
+    "branches": [
+      {"name": "Computer Science and Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 5200},
+      {"name": "Electrical and Electronics Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 9800},
+      {"name": "Mechanical Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 16500},
+      {"name": "Civil Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 22500}
+    ],
+    "strength_tags": ["placements", "brand", "south", "residential"],
+    "notes": "One of the strongest NITs with strong placements and residential campus life."
+  },
+  {
+    "college_name": "NIT Surathkal",
+    "short_name": "NITK",
+    "category": "NIT",
+    "college_type": "Institute of National Importance",
+    "city": "Mangaluru",
+    "state": "Karnataka",
+    "zone": "South",
+    "is_metro": false,
+    "hostel_available": true,
+    "campus_style": "residential",
+    "accepted_exams": ["JEE Main"],
+    "official_admissions_url": "https://www.nitk.ac.in/admissions",
+    "annual_cost_lakh": {
+      "tuition": 1.88,
+      "hostel_mess": 0.78,
+      "other": 0.19,
+      "total": 2.85
+    },
+    "branches": [
+      {"name": "Computer Science and Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 6300},
+      {"name": "Electronics and Communication Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 11200},
+      {"name": "Mechanical Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 17600},
+      {"name": "Civil Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 23800}
+    ],
+    "strength_tags": ["coastal", "placements", "campus_life", "south"],
+    "notes": "Strong brand among NITs with a highly rated residential campus."
+  },
+  {
+    "college_name": "NIT Warangal",
+    "short_name": "NITW",
+    "category": "NIT",
+    "college_type": "Institute of National Importance",
+    "city": "Warangal",
+    "state": "Telangana",
+    "zone": "South",
+    "is_metro": false,
+    "hostel_available": true,
+    "campus_style": "residential",
+    "accepted_exams": ["JEE Main"],
+    "official_admissions_url": "https://www.nitw.ac.in/",
+    "annual_cost_lakh": {
+      "tuition": 1.84,
+      "hostel_mess": 0.76,
+      "other": 0.18,
+      "total": 2.78
+    },
+    "branches": [
+      {"name": "Computer Science and Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 7200},
+      {"name": "Electrical and Electronics Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 12800},
+      {"name": "Mechanical Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 18800},
+      {"name": "Civil Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 24900}
+    ],
+    "strength_tags": ["placements", "brand", "south", "core_engineering"],
+    "notes": "Popular NIT choice with strong branch options and solid placements."
+  },
+  {
+    "college_name": "BITS Pilani",
+    "short_name": "BITS",
+    "category": "Private Deemed University",
+    "college_type": "Private",
+    "city": "Pilani",
+    "state": "Rajasthan",
+    "zone": "North",
+    "is_metro": false,
+    "hostel_available": true,
+    "campus_style": "residential",
+    "accepted_exams": ["BITSAT"],
+    "official_admissions_url": "https://www.bits-pilani.ac.in/admissions/",
+    "annual_cost_lakh": {
+      "tuition": 5.7,
+      "hostel_mess": 1.18,
+      "other": 0.42,
+      "total": 7.3
+    },
+    "branches": [
+      {"name": "Computer Science", "exam": "BITSAT", "metric": "minimum_score", "value": 328},
+      {"name": "Electronics and Instrumentation", "exam": "BITSAT", "metric": "minimum_score", "value": 285},
+      {"name": "Mechanical Engineering", "exam": "BITSAT", "metric": "minimum_score", "value": 255},
+      {"name": "Civil Engineering", "exam": "BITSAT", "metric": "minimum_score", "value": 232}
+    ],
+    "strength_tags": ["private_top_tier", "placements", "residential", "flexible_curriculum"],
+    "notes": "High-cost private option with strong placements and flexible academics."
+  },
+  {
+    "college_name": "VIT Vellore",
+    "short_name": "VIT",
+    "category": "Private University",
+    "college_type": "Private",
+    "city": "Vellore",
+    "state": "Tamil Nadu",
+    "zone": "South",
+    "is_metro": false,
+    "hostel_available": true,
+    "campus_style": "residential",
+    "accepted_exams": ["VITEEE"],
+    "official_admissions_url": "https://vit.ac.in/admissions/",
+    "annual_cost_lakh": {
+      "tuition": 3.2,
+      "hostel_mess": 1.1,
+      "other": 0.35,
+      "total": 4.65
+    },
+    "branches": [
+      {"name": "Computer Science and Engineering", "exam": "VITEEE", "metric": "closing_rank", "value": 5500},
+      {"name": "Electronics and Communication Engineering", "exam": "VITEEE", "metric": "closing_rank", "value": 13000},
+      {"name": "Mechanical Engineering", "exam": "VITEEE", "metric": "closing_rank", "value": 26000},
+      {"name": "Civil Engineering", "exam": "VITEEE", "metric": "closing_rank", "value": 42000}
+    ],
+    "strength_tags": ["private", "placements", "large_campus", "south"],
+    "notes": "Large private campus with broad branch availability and industry-focused training."
+  },
+  {
+    "college_name": "IIIT Hyderabad",
+    "short_name": "IIITH",
+    "category": "IIIT",
+    "college_type": "Deemed University",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "zone": "South",
+    "is_metro": true,
+    "hostel_available": true,
+    "campus_style": "residential",
+    "accepted_exams": ["JEE Main", "UGEE"],
+    "official_admissions_url": "https://www.iiit.ac.in/admissions/",
+    "annual_cost_lakh": {
+      "tuition": 4.6,
+      "hostel_mess": 1.0,
+      "other": 0.35,
+      "total": 5.95
+    },
+    "branches": [
+      {"name": "Computer Science and Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 1400},
+      {"name": "Electronics and Communication Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 3500},
+      {"name": "Computer Science and MS by Research", "exam": "UGEE", "metric": "closing_rank", "value": 120},
+      {"name": "ECE and MS by Research", "exam": "UGEE", "metric": "closing_rank", "value": 220}
+    ],
+    "strength_tags": ["ai", "research", "placements", "metro"],
+    "notes": "Excellent for CSE/AI-focused students, but high cost and narrower branch menu."
+  },
+  {
+    "college_name": "Delhi Technological University",
+    "short_name": "DTU",
+    "category": "State University",
+    "college_type": "Public",
+    "city": "Delhi",
+    "state": "Delhi",
+    "zone": "North",
+    "is_metro": true,
+    "hostel_available": true,
+    "campus_style": "urban_residential",
+    "accepted_exams": ["JEE Main"],
+    "official_admissions_url": "https://dtu.ac.in/",
+    "annual_cost_lakh": {
+      "tuition": 1.95,
+      "hostel_mess": 0.72,
+      "other": 0.18,
+      "total": 2.85
+    },
+    "branches": [
+      {"name": "Computer Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 10500},
+      {"name": "Electronics and Communication Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 18500},
+      {"name": "Mechanical Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 31500},
+      {"name": "Civil Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 45500}
+    ],
+    "strength_tags": ["value_for_money", "metro", "placements", "broad_branches"],
+    "notes": "Strong ROI and Delhi location make it attractive for JEE Main students."
+  },
+  {
+    "college_name": "Netaji Subhas University of Technology",
+    "short_name": "NSUT",
+    "category": "State University",
+    "college_type": "Public",
+    "city": "Delhi",
+    "state": "Delhi",
+    "zone": "North",
+    "is_metro": true,
+    "hostel_available": true,
+    "campus_style": "urban_residential",
+    "accepted_exams": ["JEE Main"],
+    "official_admissions_url": "https://www.nsut.ac.in/en/admissions",
+    "annual_cost_lakh": {
+      "tuition": 2.0,
+      "hostel_mess": 0.75,
+      "other": 0.2,
+      "total": 2.95
+    },
+    "branches": [
+      {"name": "Computer Science and Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 12500},
+      {"name": "Electronics and Communication Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 20500},
+      {"name": "Mechanical Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 34000},
+      {"name": "Civil Engineering", "exam": "JEE Main", "metric": "closing_rank", "value": 49000}
+    ],
+    "strength_tags": ["value_for_money", "metro", "cse", "placements"],
+    "notes": "Strong for Delhi-based aspirants prioritizing CSE and metro opportunities."
+  },
+  {
+    "college_name": "Jadavpur University",
+    "short_name": "JU",
+    "category": "State University",
+    "college_type": "Public",
+    "city": "Kolkata",
+    "state": "West Bengal",
+    "zone": "East",
+    "is_metro": true,
+    "hostel_available": true,
+    "campus_style": "urban_day_scholar_friendly",
+    "accepted_exams": ["WBJEE"],
+    "official_admissions_url": "https://jadavpuruniversity.in/",
+    "annual_cost_lakh": {
+      "tuition": 0.12,
+      "hostel_mess": 0.42,
+      "other": 0.08,
+      "total": 0.62
+    },
+    "branches": [
+      {"name": "Computer Science and Engineering", "exam": "WBJEE", "metric": "closing_rank", "value": 320},
+      {"name": "Electronics and Telecommunication Engineering", "exam": "WBJEE", "metric": "closing_rank", "value": 980},
+      {"name": "Mechanical Engineering", "exam": "WBJEE", "metric": "closing_rank", "value": 2100},
+      {"name": "Civil Engineering", "exam": "WBJEE", "metric": "closing_rank", "value": 3250}
+    ],
+    "strength_tags": ["low_cost", "high_roi", "metro", "academics"],
+    "notes": "Outstanding ROI and low fees, especially attractive for budget-sensitive students."
+  },
+  {
+    "college_name": "Anna University",
+    "short_name": "AU",
+    "category": "State University",
+    "college_type": "Public",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "zone": "South",
+    "is_metro": true,
+    "hostel_available": true,
+    "campus_style": "urban_residential",
+    "accepted_exams": ["TNEA"],
+    "official_admissions_url": "https://www.annauniv.edu/",
+    "annual_cost_lakh": {
+      "tuition": 0.58,
+      "hostel_mess": 0.46,
+      "other": 0.11,
+      "total": 1.15
+    },
+    "branches": [
+      {"name": "Computer Science and Engineering", "exam": "TNEA", "metric": "closing_rank", "value": 450},
+      {"name": "Electronics and Communication Engineering", "exam": "TNEA", "metric": "closing_rank", "value": 1200},
+      {"name": "Mechanical Engineering", "exam": "TNEA", "metric": "closing_rank", "value": 3100},
+      {"name": "Civil Engineering", "exam": "TNEA", "metric": "closing_rank", "value": 4800}
+    ],
+    "strength_tags": ["low_cost", "south", "metro", "state_university"],
+    "notes": "Strong low-cost public option for Tamil Nadu students prioritizing affordability."
+  }
+]

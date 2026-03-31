@@ -1,0 +1,17 @@
+﻿college_name: Delhi Technological University
+allowed_domains:
+  - dtu.ac.in
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://dtu.ac.in/Web/Admissions.php
+  - https://dtu.ac.in/Web/feeStructure.php
+  - https://dtu.ac.in/Web/placement.php
+  - https://dtu.ac.in/Web/hostels.php
+  - https://dtu.ac.in/Web/Academics.php
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics

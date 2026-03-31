@@ -1,0 +1,18 @@
+﻿college_name: IIT Delhi
+allowed_domains:
+  - home.iitd.ac.in
+  - tnp.iitd.ac.in
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://home.iitd.ac.in/admission.php
+  - https://home.iitd.ac.in/fee.php
+  - https://tnp.iitd.ac.in/
+  - https://home.iitd.ac.in/campus-life.php
+  - https://home.iitd.ac.in/academics.php
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics

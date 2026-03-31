@@ -3,49 +3,163 @@ from __future__ import annotations
 import math
 from collections import Counter
 
-from app.models import RetrievedChunk, SourceTrustLabel
+from app.config import settings
+from app.models import EvidenceDecision, RetrievalTrace, RetrievedChunk, SourceTrustLabel
 from app.official.corpus import OfficialChunk, OfficialCorpus, tokenize
+from app.official.reranker import Reranker, build_reranker
 from app.official.vector_store import OfficialVectorStore
 
 
+STOPWORDS = {
+    "a",
+    "an",
+    "and",
+    "are",
+    "at",
+    "do",
+    "does",
+    "exact",
+    "for",
+    "how",
+    "in",
+    "is",
+    "look",
+    "of",
+    "official",
+    "say",
+    "should",
+    "sources",
+    "the",
+    "what",
+    "where",
+}
+
+
 class HybridRetriever:
-    def __init__(self, corpus: OfficialCorpus, vector_store: OfficialVectorStore) -> None:
+    def __init__(
+        self,
+        corpus: OfficialCorpus,
+        vector_store: OfficialVectorStore,
+        reranker: Reranker | None = None,
+    ) -> None:
         self.corpus = corpus
         self.vector_store = vector_store
+        self.reranker = reranker or build_reranker()
         self._refresh_stats()
 
     def refresh(self) -> None:
         self.corpus.refresh()
         self._refresh_stats()
+        self.vector_store.upsert_chunks(self.corpus.chunks)
 
     def retrieve(
-        self, question: str, college_name: str | None = None, limit: int = 6
-    ) -> list[RetrievedChunk]:
+        self, question: str, college_name: str | None = None, limit: int | None = None
+    ) -> tuple[list[RetrievedChunk], RetrievalTrace]:
+        final_limit = limit or settings.retrieval_top_k_rerank
         query_tokens = tokenize(question)
-        lexical_candidates = self._lexical_candidates(query_tokens, college_name, limit * 3)
-        vector_candidates = self.vector_store.query(question, college_name, limit * 3)
+        self._active_query_tokens = query_tokens
+        lexical_candidates = self._lexical_candidates(
+            query_tokens,
+            college_name,
+            settings.retrieval_top_k_lexical,
+        )
+        vector_candidates = self.vector_store.query(
+            question,
+            college_name,
+            settings.retrieval_top_k_vector,
+        )
 
         merged: dict[str, RetrievedChunk] = {}
-        for candidate in lexical_candidates:
-            merged[candidate.chunk_id] = candidate
-
-        for candidate in vector_candidates:
+        for candidate in lexical_candidates + vector_candidates:
             existing = merged.get(candidate.chunk_id)
             if existing is None:
                 merged[candidate.chunk_id] = candidate
                 continue
-            existing.vector_score = max(existing.vector_score, candidate.vector_score)
-            existing.combined_score = round(
-                existing.lexical_score * 0.55 + existing.vector_score * 0.45, 4
+            merged[candidate.chunk_id] = existing.model_copy(
+                update={
+                    "lexical_score": max(existing.lexical_score, candidate.lexical_score),
+                    "vector_score": max(existing.vector_score, candidate.vector_score),
+                    "combined_score": round(
+                        max(existing.lexical_score, candidate.lexical_score) * 0.5
+                        + max(existing.vector_score, candidate.vector_score) * 0.5,
+                        4,
+                    ),
+                    "retrieval_stage": "hybrid",
+                }
             )
 
-        for candidate in merged.values():
+        hybrid_candidates = list(merged.values())
+        for candidate in hybrid_candidates:
             candidate.combined_score = round(
-                candidate.lexical_score * 0.55 + candidate.vector_score * 0.45, 4
+                candidate.lexical_score * 0.5 + candidate.vector_score * 0.5,
+                4,
             )
+            if candidate.retrieval_stage == "unknown":
+                candidate.retrieval_stage = "hybrid"
 
-        ranked = sorted(merged.values(), key=lambda item: item.combined_score, reverse=True)
-        return ranked[:limit]
+        reranked = self.reranker.rerank(question, hybrid_candidates)[:final_limit]
+        decision = self.make_decision(reranked)
+        trace = RetrievalTrace(
+            lexical_candidates=lexical_candidates,
+            vector_candidates=vector_candidates,
+            reranked_candidates=reranked,
+            decision=decision,
+        )
+        return reranked, trace
+
+    def make_decision(self, chunks: list[RetrievedChunk]) -> EvidenceDecision:
+        if not chunks:
+            return EvidenceDecision(
+                answerable=False,
+                reason="no_retrieved_chunks",
+                top_score=0.0,
+                threshold=settings.min_rerank_score_to_answer,
+            )
+        top_rerank = chunks[0].rerank_score
+        top_score = (
+            top_rerank
+            if top_rerank is not None and top_rerank >= 0
+            else chunks[0].combined_score
+        )
+        coverage = self._salient_query_coverage(chunks)
+        if top_score < settings.min_rerank_score_to_answer:
+            return EvidenceDecision(
+                answerable=False,
+                reason="top_evidence_score_below_threshold",
+                top_score=top_score,
+                threshold=settings.min_rerank_score_to_answer,
+            )
+        if coverage < 0.35:
+            return EvidenceDecision(
+                answerable=False,
+                reason="insufficient_query_token_support",
+                top_score=coverage,
+                threshold=0.35,
+            )
+        return EvidenceDecision(
+            answerable=True,
+            reason="sufficient_evidence",
+            top_score=top_score,
+            threshold=settings.min_rerank_score_to_answer,
+        )
+
+    def _salient_query_coverage(self, chunks: list[RetrievedChunk]) -> float:
+        question_tokens = getattr(self, "_active_query_tokens", [])
+        if not question_tokens:
+            return 0.0
+        evidence_tokens: set[str] = set()
+        for chunk in chunks[:3]:
+            evidence_tokens.update(tokenize(chunk.content))
+            evidence_tokens.update(tokenize(chunk.title))
+        salient_tokens = [
+            token
+            for token in question_tokens
+            if token not in STOPWORDS and (len(token) > 2 or token.isdigit())
+        ]
+        if not salient_tokens:
+            return 1.0
+        hits = sum(1 for token in salient_tokens if token in evidence_tokens)
+        return hits / len(salient_tokens)
 
     def _refresh_stats(self) -> None:
         self.doc_freq = self._build_document_frequency(self.corpus.chunks)
@@ -77,17 +191,23 @@ class HybridRetriever:
             scored.append(
                 RetrievedChunk(
                     chunk_id=chunk.chunk_id,
+                    doc_id=chunk.doc_id,
+                    college_name=chunk.college_name,
                     title=chunk.title,
                     url=chunk.url,
                     content=chunk.content,
+                    source_kind=chunk.source_kind,
                     lexical_score=round(lexical, 4),
-                    vector_score=0.0,
+                    vector_score=round(vector_like, 4),
                     combined_score=round(combined, 4),
+                    retrieval_stage="lexical",
                     trust_label=SourceTrustLabel.official_verified,
                 )
             )
 
         scored.sort(key=lambda item: item.combined_score, reverse=True)
+        for idx, item in enumerate(scored[:limit]):
+            item.rank = idx + 1
         return scored[:limit]
 
     def _build_document_frequency(self, chunks: list[OfficialChunk]) -> dict[str, int]:

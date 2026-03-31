@@ -1,6 +1,15 @@
 from __future__ import annotations
 
-from app.models import OfficialAnswer, OfficialIngestResponse, OfficialSource
+from app.generation import AnswerGenerator, build_answer_generator
+from app.models import (
+    AnswerCitation,
+    OfficialAnswer,
+    OfficialIngestResponse,
+    OfficialSource,
+    QueryStatus,
+    RetrievalTrace,
+    RetrievedChunk,
+)
 from app.official.corpus import OfficialCorpus
 from app.official.ingestion import OfficialIngestionService
 from app.official.retrieval import HybridRetriever
@@ -8,7 +17,7 @@ from app.official.vector_store import OfficialVectorStore
 
 
 class OfficialEvidenceService:
-    """Lightweight hybrid RAG service over the seeded official corpus."""
+    """Production-shaped RAG service over the seeded official corpus."""
 
     def __init__(
         self,
@@ -16,6 +25,7 @@ class OfficialEvidenceService:
         retriever: HybridRetriever | None = None,
         vector_store: OfficialVectorStore | None = None,
         ingestion_service: OfficialIngestionService | None = None,
+        answer_generator: AnswerGenerator | None = None,
     ) -> None:
         self.corpus = corpus or OfficialCorpus()
         self.vector_store = vector_store or OfficialVectorStore()
@@ -24,45 +34,103 @@ class OfficialEvidenceService:
         self.ingestion_service = ingestion_service or OfficialIngestionService(
             self.corpus, self.vector_store
         )
+        self.answer_generator = answer_generator or build_answer_generator()
 
-    def get_official_answer(
-        self, question: str, college_name: str | None, provided: OfficialAnswer | None
-    ) -> OfficialAnswer:
+    def answer_question(
+        self,
+        question: str,
+        college_name: str | None,
+        *,
+        provided: OfficialAnswer | None = None,
+        top_k: int | None = None,
+    ) -> tuple[QueryStatus, str, list[AnswerCitation], OfficialAnswer, RetrievalTrace]:
         if provided is not None:
-            return provided
+            citations = [
+                AnswerCitation(
+                    chunk_id=source.chunk_id or f"provided::{idx}",
+                    title=source.title,
+                    url=source.url,
+                    supporting_text=source.snippet,
+                )
+                for idx, source in enumerate(provided.sources)
+            ]
+            trace = RetrievalTrace()
+            return QueryStatus.answered, provided.summary, citations, provided, trace
 
-        retrieved = self.retriever.retrieve(question, college_name)
-        if not retrieved:
-            return OfficialAnswer(
-                summary=(
-                    "I could not find a matching official source in the current local corpus. "
-                    "Connect the full official ingestion pipeline to answer this reliably."
-                ),
+        retrieved, trace = self.retriever.retrieve(question, college_name, limit=top_k)
+        trace.decision = self.retriever.make_decision(retrieved)
+        if not trace.decision.answerable:
+            official_answer = OfficialAnswer(
+                summary="I do not have enough official evidence in the current corpus to answer that reliably.",
                 note=(
-                    "The official hybrid RAG is working against the seeded corpus only. "
-                    "Production use should ingest JoSAA, institute PDFs, and current admission documents."
+                    "The system abstained because the retrieved official evidence did not clear "
+                    "the minimum reranking threshold."
                 ),
+                retrieved_chunks=retrieved,
+            )
+            return (
+                QueryStatus.insufficient_evidence,
+                official_answer.summary,
+                [],
+                official_answer,
+                trace,
             )
 
-        bullet_points = [f"- {chunk.content}" for chunk in retrieved[:3]]
-        college_prefix = f" for {college_name}" if college_name else ""
-        summary = (
-            f"Based on the highest-scoring official sources{college_prefix}, the most relevant points are:\n"
-            + "\n".join(bullet_points)
+        payload, generation_trace = self.answer_generator.generate(
+            question=question,
+            college_name=college_name,
+            chunks=retrieved,
         )
+        trace.generation = generation_trace
+        citations = self._validate_citations(payload.citations, retrieved)
+        if payload.status == QueryStatus.answered and not citations:
+            payload = payload.model_copy(
+                update={
+                    "status": QueryStatus.insufficient_evidence,
+                    "answer": "I could not verify chunk-backed citations for a reliable answer.",
+                }
+            )
+
         sources = [
-            OfficialSource(title=chunk.title, url=chunk.url, snippet=chunk.content)
+            OfficialSource(
+                title=chunk.title,
+                url=chunk.url,
+                snippet=chunk.content,
+                chunk_id=chunk.chunk_id,
+            )
             for chunk in retrieved[:4]
         ]
-        return OfficialAnswer(
-            summary=summary,
+        official_answer = OfficialAnswer(
+            summary=payload.answer,
             sources=sources,
             note=(
-                "This answer is generated by a lightweight hybrid retriever that combines lexical "
-                "and vector-style similarity over the local official corpus."
+                "Answer generated from official retrieved chunks with hybrid retrieval, reranking, "
+                "and citation validation."
             ),
             retrieved_chunks=retrieved,
         )
+        return payload.status, payload.answer, citations, official_answer, trace
+
+    def _validate_citations(
+        self,
+        citation_ids: list[str],
+        retrieved: list[RetrievedChunk],
+    ) -> list[AnswerCitation]:
+        by_id = {chunk.chunk_id: chunk for chunk in retrieved}
+        citations: list[AnswerCitation] = []
+        for citation_id in citation_ids:
+            chunk = by_id.get(citation_id)
+            if chunk is None:
+                continue
+            citations.append(
+                AnswerCitation(
+                    chunk_id=chunk.chunk_id,
+                    title=chunk.title,
+                    url=chunk.url,
+                    supporting_text=chunk.content,
+                )
+            )
+        return citations
 
     async def ingest_sources(
         self,

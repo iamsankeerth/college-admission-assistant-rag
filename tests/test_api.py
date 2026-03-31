@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datetime import datetime, timezone
 
 from fastapi.testclient import TestClient
@@ -5,8 +7,6 @@ from fastapi.testclient import TestClient
 from app.api.main import app
 from app.models import (
     BiasWarning,
-    OfficialAnswer,
-    OfficialSource,
     PublicSignalsReport,
     RedditSignal,
     SourceTrustLabel,
@@ -17,27 +17,79 @@ from app.models import (
 client = TestClient(app)
 
 
-def test_query_without_public_signals_returns_official_answer():
+def test_query_returns_structured_answer():
     response = client.post(
         "/query",
         json={
-            "question": "Explain how admissions work through official counselling.",
-            "official_answer": {
-                "summary": "Officially, admissions follow counselling notices.",
-                "sources": [
-                    {
-                        "title": "Official Notice",
-                        "url": "https://example.edu/notice",
-                        "snippet": "Admissions follow official counselling notices.",
-                    }
-                ],
-            },
+            "question": "How are admissions handled at IIT Hyderabad?",
+            "college_name": "IIT Hyderabad",
+            "run_verification": True,
         },
     )
     assert response.status_code == 200
     body = response.json()
-    assert body["public_signals_used"] is False
-    assert body["official_answer"]["summary"] == "Officially, admissions follow counselling notices."
+    assert body["status"] == "answered"
+    assert body["citations"]
+    assert body["official_answer"]["sources"]
+    assert body["verification_report"] is not None
+
+
+def test_recommend_endpoint_returns_personalized_results():
+    response = client.post(
+        "/recommend",
+        json={
+            "entrance_exam": "JEE Main",
+            "rank": 12000,
+            "preferred_branches": ["Computer Science and Engineering"],
+            "budget_lakh": 4.5,
+            "preferred_states": ["Karnataka", "Tamil Nadu"],
+            "preferred_zones": ["South"],
+            "hostel_required": True,
+            "max_results": 4,
+        },
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["recommendations"]
+    assert body["student_profile"]["entrance_exam"] == "JEE Main"
+    assert body["recommendations"][0]["reasons"]
+
+
+def test_preference_guide_endpoint_returns_fields():
+    response = client.get("/guide/preferences")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["fields"]
+    assert any(field["field"] == "entrance_exam" for field in body["fields"])
+
+
+def test_query_can_return_debug_trace():
+    response = client.post(
+        "/query",
+        json={
+            "question": "What do official sources say about IIT Hyderabad hostel facilities?",
+            "college_name": "IIT Hyderabad",
+            "debug": True,
+        },
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["debug_trace"] is not None
+    assert body["debug_trace"]["reranked_candidates"]
+
+
+def test_query_abstains_on_unsupported_specific_claim():
+    response = client.post(
+        "/query",
+        json={
+            "question": "What was the exact highest salary package and closing rank for computer science at IIT Hyderabad in 2025?",
+            "college_name": "IIT Hyderabad",
+        },
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "insufficient_evidence"
+    assert body["citations"] == []
 
 
 def test_query_with_public_signals_uses_stubbed_report(monkeypatch):
@@ -93,20 +145,12 @@ def test_query_with_public_signals_uses_stubbed_report(monkeypatch):
         "/query",
         json={
             "question": "What is campus life like at IIT Hyderabad?",
-            "official_answer": {
-                "summary": "Officially, hostel and campus information comes from institute pages.",
-                "sources": [
-                    {
-                        "title": "Campus Life",
-                        "url": "https://example.edu/campus",
-                        "snippet": "The campus page describes hostel and student facilities.",
-                    }
-                ],
-            },
+            "college_name": "IIT Hyderabad",
+            "include_public_signals": True,
         },
     )
     assert response.status_code == 200
     body = response.json()
     assert body["public_signals_used"] is True
     assert body["bias_warnings"]
-    assert "Student Signals: Reddit" in body["answer"]
+    assert body["public_signals_report"]["reddit_themes"]

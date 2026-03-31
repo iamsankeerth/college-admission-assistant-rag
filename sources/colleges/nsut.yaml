@@ -1,0 +1,17 @@
+﻿college_name: Netaji Subhas University of Technology
+allowed_domains:
+  - www.nsut.ac.in
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://www.nsut.ac.in/en/admissions
+  - https://www.nsut.ac.in/en/fees
+  - https://www.nsut.ac.in/en/placement
+  - https://www.nsut.ac.in/en/hostels
+  - https://www.nsut.ac.in/en/academics
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics

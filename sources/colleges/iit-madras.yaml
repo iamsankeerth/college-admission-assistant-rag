@@ -1,0 +1,18 @@
+﻿college_name: IIT Madras
+allowed_domains:
+  - www.iitm.ac.in
+  - careerservices.iitm.ac.in
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://www.iitm.ac.in/academics/admissions
+  - https://www.iitm.ac.in/academics/academic-fees
+  - https://careerservices.iitm.ac.in/
+  - https://www.iitm.ac.in/campus-life/hostel-life
+  - https://www.iitm.ac.in/academics/overview
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics

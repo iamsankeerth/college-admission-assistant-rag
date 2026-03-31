@@ -1,0 +1,7 @@
+version: 1
+answer_provider: gemini
+gemini_model: gemini-2.5-flash
+embedding_backend: sentence_transformers
+embedding_model_name: BAAI/bge-small-en-v1.5
+reranker_backend: cross_encoder
+reranker_model_name: cross-encoder/ms-marco-MiniLM-L-6-v2

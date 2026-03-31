@@ -1,0 +1,17 @@
+﻿college_name: VIT Vellore
+allowed_domains:
+  - vit.ac.in
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://vit.ac.in/admissions/
+  - https://vit.ac.in/fee-structure/
+  - https://vit.ac.in/career-development-centre/
+  - https://vit.ac.in/campus-life/
+  - https://vit.ac.in/academics/
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics

@@ -1,0 +1,17 @@
+﻿college_name: NIT Surathkal
+allowed_domains:
+  - www.nitk.ac.in
+source_kind_defaults:
+  default: official
+seed_urls:
+  - https://www.nitk.ac.in/admissions
+  - https://www.nitk.ac.in/fees
+  - https://www.nitk.ac.in/placement
+  - https://www.nitk.ac.in/hostels
+  - https://www.nitk.ac.in/academics
+tags:
+  - admissions
+  - fees
+  - placements
+  - hostel
+  - academics
