@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import time
 from typing import Protocol
 
 from pydantic import ValidationError
@@ -105,6 +106,20 @@ class GeminiAnswerGenerator:
         self.client = genai.Client(api_key=settings.gemini_api_key)
         self.prompt_config = settings.answer_prompt
         self.abstain_config = settings.abstain_prompt
+        self.max_attempts = 3
+        self.base_delay = 1.0
+        self.max_delay = 8.0
+
+        from app.generation.circuit_breaker import get_circuit_breaker, CircuitBreakerConfig
+
+        self.circuit_breaker = get_circuit_breaker(
+            "gemini-generation",
+            CircuitBreakerConfig(
+                failure_threshold=5,
+                success_threshold=2,
+                timeout_seconds=30.0,
+            ),
+        )
 
     def generate(
         self,
@@ -113,6 +128,12 @@ class GeminiAnswerGenerator:
         college_name: str | None,
         chunks: list[RetrievedChunk],
     ) -> tuple[GeneratedAnswerPayload, GenerationTrace]:
+        if not self.circuit_breaker.is_available:
+            return self._degraded_response(
+                "circuit_breaker_open",
+                "Gemini generation service is temporarily unavailable.",
+            )
+
         prompt_version = str(self.prompt_config.get("version", "1"))
         context_block = _build_context_block(chunks)
         system_prompt = self.prompt_config.get(
@@ -140,8 +161,10 @@ class GeminiAnswerGenerator:
         )
 
         attempts = 0
-        for _ in range(2):
+        last_error: Exception | None = None
+        for attempt in range(self.max_attempts):
             attempts += 1
+            start_time = time.time()
             try:
                 response = self.client.models.generate_content(
                     model=settings.gemini_model,
@@ -151,34 +174,84 @@ class GeminiAnswerGenerator:
                         response_mime_type="application/json",
                     ),
                 )
+                latency_ms = (time.time() - start_time) * 1000
                 payload = GeneratedAnswerPayload.model_validate_json(response.text)
+                self.circuit_breaker.record_success()
                 return payload, GenerationTrace(
                     provider="gemini",
                     model=settings.gemini_model,
                     prompt_name="answer",
                     prompt_version=prompt_version,
                     attempts=attempts,
+                    latency_ms=round(latency_ms, 2),
                 )
-            except (ValidationError, json.JSONDecodeError, ValueError):
+            except ValidationError:
                 prompt += (
                     "\n\nThe previous response was invalid. "
                     "Return strict JSON only with status, answer, and citations."
                 )
+            except (json.JSONDecodeError, ValueError):
+                prompt += (
+                    "\n\nThe previous response was not valid JSON. "
+                    "Return strict JSON only with status, answer, and citations."
+                )
+            except Exception as exc:
+                error_str = str(exc).lower()
+                is_rate_limit = (
+                    "429" in error_str
+                    or "rate limit" in error_str
+                    or "quota" in error_str
+                    or "RESOURCE_EXHAUSTED" in error_str
+                )
+                is_timeout = (
+                    "timeout" in error_str
+                    or "timed out" in error_str
+                    or "deadline" in error_str
+                )
+                is_server_error = (
+                    "500" in error_str
+                    or "502" in error_str
+                    or "503" in error_str
+                    or "server error" in error_str
+                )
+                if is_rate_limit or is_timeout or is_server_error:
+                    if attempt < self.max_attempts - 1:
+                        delay = min(self.base_delay * (2 ** attempt), self.max_delay)
+                        time.sleep(delay)
+                        continue
+                    if is_rate_limit:
+                        self.circuit_breaker.record_failure()
+                        return self._degraded_response("rate_limited", "Rate limit exceeded. Please slow down.", retry_after=60)
+                    if is_timeout:
+                        return self._degraded_response("timeout", "Generation timed out. Please try again.", retry_after=10)
+                last_error = exc  # noqa: F841
 
-        fallback = GeneratedAnswerPayload(
-            status=QueryStatus.insufficient_evidence,
-            answer=self.abstain_config.get(
+        self.circuit_breaker.record_failure()
+        return self._degraded_response(
+            "generation_failed",
+            self.abstain_config.get(
                 "fallback_answer",
                 "I do not have enough official evidence to answer that reliably.",
             ),
+        )
+
+    def _degraded_response(
+        self,
+        reason: str,
+        message: str,
+        retry_after: int | None = None,
+    ) -> tuple[GeneratedAnswerPayload, GenerationTrace]:
+        fallback = GeneratedAnswerPayload(
+            status=QueryStatus.insufficient_evidence,
+            answer=message,
             citations=[],
         )
         return fallback, GenerationTrace(
             provider="gemini",
             model=settings.gemini_model,
             prompt_name="answer",
-            prompt_version=prompt_version,
-            attempts=attempts,
+            prompt_version="1",
+            attempts=3,
             fallback_used=True,
         )
 

@@ -84,6 +84,8 @@ def normalize_college_name(name: str) -> str | None:
 
 
 def _similar(a: str, b: str) -> bool:
+    if len(a) < 3 or len(b) < 3:
+        return False
     return SequenceMatcher(None, a, b).ratio() >= TYPO_THRESHOLD
 
 
@@ -100,13 +102,13 @@ def expand_query(query: str) -> str:
 
     for college_canonical, aliases in COLLEGE_NORMALIZATIONS.items():
         for alias in aliases:
-            if alias in query_lower and college_canonical.lower() not in query_lower:
+            if len(alias) >= 3 and alias in query_lower and college_canonical.lower() not in query_lower:
                 expanded_terms.append(college_canonical)
                 break
 
     for branch_canonical, aliases in BRANCH_ALIASES.items():
         for alias in aliases:
-            if alias in query_lower and branch_canonical.lower() not in query_lower:
+            if len(alias) >= 3 and alias in query_lower and branch_canonical.lower() not in query_lower:
                 expanded_terms.append(branch_canonical)
                 break
 

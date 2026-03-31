@@ -79,6 +79,8 @@ class HybridRetriever:
 
         normalized_college = normalize_college_name(college_name) if college_name else None
         cache_key = normalize_for_cache(question, normalized_college or college_name)
+        query_tokens = tokenize(question)
+        self._active_query_tokens = query_tokens
 
         if settings.result_cache_enabled:
             cached = self.cache.get(cache_key, normalized_college or college_name)
@@ -92,9 +94,6 @@ class HybridRetriever:
                     decision=decision,
                 )
                 return reranked, trace
-
-        query_tokens = tokenize(question)
-        self._active_query_tokens = query_tokens
 
         lexical_candidates = self._lexical_candidates(
             query_tokens,

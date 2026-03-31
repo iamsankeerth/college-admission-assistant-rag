@@ -79,6 +79,10 @@ class AppSettings(BaseSettings):
     tracing_enabled: bool = False
     metrics_enabled: bool = False
     nli_verifier_enabled: bool = False
+    circuit_breaker_failure_threshold: int = 5
+    circuit_breaker_timeout_seconds: float = 30.0
+    generation_max_retries: int = 3
+    generation_timeout_seconds: float = 15.0
 
     @property
     def retrieval_config(self) -> dict:

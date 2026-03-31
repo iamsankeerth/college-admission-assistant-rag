@@ -38,6 +38,8 @@ class ErrorCode(str, Enum):
     INTERNAL_ERROR = "INTERNAL_ERROR"
     RATE_LIMITED = "RATE_LIMITED"
     PUBLIC_SIGNALS_ERROR = "PUBLIC_SIGNALS_ERROR"
+    RATE_LIMIT_EXCEEDED = "RATE_LIMIT_EXCEEDED"
+    GENERATION_TIMEOUT = "GENERATION_TIMEOUT"
 
 
 class ErrorDetail(BaseModel):
@@ -121,6 +123,22 @@ class GenerationTrace(BaseModel):
     prompt_version: str
     attempts: int = 1
     fallback_used: bool = False
+    latency_ms: float | None = None
+
+
+class DegradedAnswerType(str, Enum):
+    NO_EVIDENCE = "no_evidence"
+    INSUFFICIENT_EVIDENCE = "insufficient_evidence"
+    GENERATION_FAILED = "generation_failed"
+    RATE_LIMITED = "rate_limited"
+    TIMEOUT = "timeout"
+
+
+class DegradedAnswer(BaseModel):
+    answer_type: DegradedAnswerType
+    message: str
+    suggestions: list[str] = Field(default_factory=list)
+    retry_after_seconds: int | None = None
 
 
 class RetrievalTrace(BaseModel):
@@ -282,6 +300,15 @@ class GoldenQueryRecord(BaseModel):
     expected_chunk_ids: list[str] = Field(default_factory=list)
     should_abstain: bool = False
     notes: str = ""
+
+
+class CircuitBreakerState(BaseModel):
+    name: str
+    state: str = "closed"
+    failure_count: int = 0
+    last_failure_at: datetime | None = None
+    last_success_at: datetime | None = None
+    consecutive_successes: int = 0
 
 
 class BranchCutoff(BaseModel):
