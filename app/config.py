@@ -38,6 +38,7 @@ class AppSettings(BaseSettings):
     log_level: str = "INFO"
 
     cache_ttl_seconds: int = 60 * 60 * 24
+    result_cache_enabled: bool = True
     request_timeout_seconds: float = 20.0
     user_agent: str = "CollegeAdmissionAssistant/0.2 (official evidence rag)"
 
@@ -59,6 +60,8 @@ class AppSettings(BaseSettings):
     retrieval_top_k_vector: int = 10
     retrieval_top_k_rerank: int = 5
     min_rerank_score_to_answer: float = 0.1
+    mmr_diversity_factor: float = 0.3
+    query_normalization_enabled: bool = True
 
     retrieval_config_path: str = "config/retrieval.yaml"
     model_config_path: str = "config/models.yaml"
@@ -75,6 +78,7 @@ class AppSettings(BaseSettings):
 
     tracing_enabled: bool = False
     metrics_enabled: bool = False
+    nli_verifier_enabled: bool = False
 
     @property
     def retrieval_config(self) -> dict:

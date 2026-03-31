@@ -10,7 +10,9 @@ from app.models import (
     RetrievalTrace,
     RetrievedChunk,
 )
+from app.official.cache import RetrievalCache
 from app.official.corpus import OfficialCorpus
+from app.official.corpus_manager import CorpusManager
 from app.official.ingestion import OfficialIngestionService
 from app.official.retrieval import HybridRetriever
 from app.official.vector_store import OfficialVectorStore
@@ -26,15 +28,24 @@ class OfficialEvidenceService:
         vector_store: OfficialVectorStore | None = None,
         ingestion_service: OfficialIngestionService | None = None,
         answer_generator: AnswerGenerator | None = None,
+        cache: RetrievalCache | None = None,
+        corpus_manager: CorpusManager | None = None,
     ) -> None:
         self.corpus = corpus or OfficialCorpus()
         self.vector_store = vector_store or OfficialVectorStore()
         self.vector_store.upsert_chunks(self.corpus.chunks)
-        self.retriever = retriever or HybridRetriever(self.corpus, self.vector_store)
+        self.cache = cache or RetrievalCache()
+        self.corpus_manager = corpus_manager or CorpusManager()
+        self.retriever = retriever or HybridRetriever(
+            self.corpus,
+            self.vector_store,
+            cache=self.cache,
+        )
         self.ingestion_service = ingestion_service or OfficialIngestionService(
             self.corpus, self.vector_store
         )
         self.answer_generator = answer_generator or build_answer_generator()
+        self._init_corpus_version()
 
     def answer_question(
         self,
@@ -149,4 +160,15 @@ class OfficialEvidenceService:
             source_kind=source_kind,
         )
         self.retriever.refresh()
+        self._update_corpus_version()
         return OfficialIngestResponse(ingested=ingested, errors=errors)
+
+    def _init_corpus_version(self) -> None:
+        existing = self.corpus_manager.get_version()
+        if existing is None:
+            college_names = {chunk.college_name for chunk in self.corpus.chunks}
+            self.corpus_manager.update_from_corpus(self.corpus, len(college_names))
+
+    def _update_corpus_version(self) -> None:
+        college_names = {chunk.college_name for chunk in self.corpus.chunks}
+        self.corpus_manager.update_from_corpus(self.corpus, len(college_names))

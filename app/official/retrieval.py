@@ -2,37 +2,47 @@ from __future__ import annotations
 
 import math
 from collections import Counter
+from typing import Protocol
 
 from app.config import settings
 from app.models import EvidenceDecision, RetrievalTrace, RetrievedChunk, SourceTrustLabel
+from app.official.cache import RetrievalCache
 from app.official.corpus import OfficialChunk, OfficialCorpus, tokenize
+from app.official.query_normalizer import (
+    expand_query,
+    extract_query_terms,
+    normalize_college_name,
+    normalize_query,
+    normalize_for_cache,
+)
 from app.official.reranker import Reranker, build_reranker
 from app.official.vector_store import OfficialVectorStore
 
 
 STOPWORDS = {
-    "a",
-    "an",
-    "and",
-    "are",
-    "at",
-    "do",
-    "does",
-    "exact",
-    "for",
-    "how",
-    "in",
-    "is",
-    "look",
-    "of",
-    "official",
-    "say",
-    "should",
-    "sources",
-    "the",
-    "what",
-    "where",
+    "a", "an", "and", "are", "at", "do", "does", "exact", "for", "how",
+    "in", "is", "look", "of", "official", "say", "should", "sources",
+    "the", "what", "where",
 }
+
+
+class QueryNormalizer(Protocol):
+    def normalize(self, query: str) -> str: ...
+    def expand(self, query: str) -> str: ...
+    def extract_terms(self, query: str) -> list[str]: ...
+
+
+class DefaultQueryNormalizer:
+    def normalize(self, query: str) -> str:
+        return normalize_query(query)
+
+    def expand(self, query: str) -> str:
+        if not settings.query_normalization_enabled:
+            return query
+        return expand_query(query)
+
+    def extract_terms(self, query: str) -> list[str]:
+        return extract_query_terms(query)
 
 
 class HybridRetriever:
@@ -41,31 +51,59 @@ class HybridRetriever:
         corpus: OfficialCorpus,
         vector_store: OfficialVectorStore,
         reranker: Reranker | None = None,
+        cache: RetrievalCache | None = None,
+        query_normalizer: QueryNormalizer | None = None,
     ) -> None:
         self.corpus = corpus
         self.vector_store = vector_store
         self.reranker = reranker or build_reranker()
+        self.cache = cache or RetrievalCache()
+        self.query_normalizer = query_normalizer or DefaultQueryNormalizer()
         self._refresh_stats()
 
     def refresh(self) -> None:
         self.corpus.refresh()
         self._refresh_stats()
         self.vector_store.upsert_chunks(self.corpus.chunks)
+        if settings.result_cache_enabled:
+            self.cache.invalidate()
 
     def retrieve(
         self, question: str, college_name: str | None = None, limit: int | None = None
     ) -> tuple[list[RetrievedChunk], RetrievalTrace]:
         final_limit = limit or settings.retrieval_top_k_rerank
+
+        original_question = question
+        question = self.query_normalizer.normalize(question)
+        question = self.query_normalizer.expand(question)
+
+        normalized_college = normalize_college_name(college_name) if college_name else None
+        cache_key = normalize_for_cache(question, normalized_college or college_name)
+
+        if settings.result_cache_enabled:
+            cached = self.cache.get(cache_key, normalized_college or college_name)
+            if cached is not None:
+                reranked = self._apply_mmr(question, cached[:final_limit])
+                decision = self.make_decision(reranked)
+                trace = RetrievalTrace(
+                    lexical_candidates=[],
+                    vector_candidates=[],
+                    reranked_candidates=reranked,
+                    decision=decision,
+                )
+                return reranked, trace
+
         query_tokens = tokenize(question)
         self._active_query_tokens = query_tokens
+
         lexical_candidates = self._lexical_candidates(
             query_tokens,
-            college_name,
+            normalized_college or college_name,
             settings.retrieval_top_k_lexical,
         )
         vector_candidates = self.vector_store.query(
-            question,
-            college_name,
+            original_question,
+            normalized_college or college_name,
             settings.retrieval_top_k_vector,
         )
 
@@ -97,7 +135,13 @@ class HybridRetriever:
             if candidate.retrieval_stage == "unknown":
                 candidate.retrieval_stage = "hybrid"
 
-        reranked = self.reranker.rerank(question, hybrid_candidates)[:final_limit]
+        reranked = self.reranker.rerank(question, hybrid_candidates)
+        reranked = self._apply_mmr(question, reranked)
+
+        if settings.result_cache_enabled:
+            self.cache.set(cache_key, normalized_college or college_name, reranked)
+
+        reranked = reranked[:final_limit]
         decision = self.make_decision(reranked)
         trace = RetrievalTrace(
             lexical_candidates=lexical_candidates,
@@ -106,6 +150,64 @@ class HybridRetriever:
             decision=decision,
         )
         return reranked, trace
+
+    def _apply_mmr(
+        self, query: str, chunks: list[RetrievedChunk]
+    ) -> list[RetrievedChunk]:
+        if not chunks or settings.mmr_diversity_factor <= 0:
+            return chunks
+
+        try:
+            import numpy as np
+        except ImportError:
+            return chunks
+
+        lambda_param = settings.mmr_diversity_factor
+        try:
+            query_embedding = self.vector_store.embedding_model.embed_query(query)
+            doc_embeddings = self.vector_store.embedding_model.embed_documents(
+                [c.content for c in chunks]
+            )
+        except Exception:
+            return chunks
+
+        query_vec = np.array(query_embedding, dtype=np.float32)
+        q_norm = np.linalg.norm(query_vec)
+        if q_norm > 0:
+            query_vec = query_vec / q_norm
+
+        doc_vecs = []
+        for emb in doc_embeddings:
+            v = np.array(emb, dtype=np.float32)
+            n = np.linalg.norm(v)
+            doc_vecs.append(v / n if n > 0 else v)
+
+        selected: list[RetrievedChunk] = []
+        remaining_indices = list(range(len(chunks)))
+
+        while remaining_indices:
+            if not selected:
+                idx = remaining_indices.pop(0)
+                selected.append(chunks[idx])
+                continue
+
+            best_score = float("-inf")
+            best_pos = 0
+
+            for pos, idx in enumerate(remaining_indices):
+                relevance = chunks[idx].rerank_score or chunks[idx].combined_score
+                similarity = float(np.dot(query_vec, doc_vecs[idx]))
+                mmr_score = lambda_param * similarity + (1 - lambda_param) * relevance
+                if mmr_score > best_score:
+                    best_score = mmr_score
+                    best_pos = pos
+
+            chosen_idx = remaining_indices.pop(best_pos)
+            selected.append(chunks[chosen_idx])
+
+        for i, chunk in enumerate(selected):
+            chunk.rank = i + 1
+        return selected
 
     def make_decision(self, chunks: list[RetrievedChunk]) -> EvidenceDecision:
         if not chunks:

@@ -13,13 +13,31 @@ def _tokens(text: str) -> set[str]:
 
 
 class FinalAnswerVerifier:
-    """Heuristic NLI-style verifier over the final evidence bundle.
+    """Final-answer verifier that delegates to NLI-based or heuristic verification.
 
-    This is an optional claim-support check, not a full transformer-based entailment model.
-    It checks whether final answer claims have enough lexical support in the retrieved evidence.
+    Uses NLIVerifier when GEMINI_API_KEY is available and NLI_VERIFIER_ENABLED is true,
+    otherwise falls back to heuristic lexical overlap checking.
     """
 
+    def __init__(self) -> None:
+        from app.config import settings
+
+        self.use_nli = getattr(settings, "nli_verifier_enabled", False)
+        if self.use_nli:
+            from app.verification.nli_verifier import NLIVerifier
+
+            self._nli_verifier = NLIVerifier()
+        else:
+            self._nli_verifier = None
+
     def verify(self, answer_text: str, evidence_texts: list[str]) -> VerificationReport:
+        if self._nli_verifier is not None:
+            return self._nli_verifier.verify(answer_text, evidence_texts)
+        return self._heuristic_verify(answer_text, evidence_texts)
+
+    def _heuristic_verify(
+        self, answer_text: str, evidence_texts: list[str]
+    ) -> VerificationReport:
         claims = self._extract_claims(answer_text)
         checks: list[ClaimCheck] = []
         for claim in claims:
@@ -27,22 +45,21 @@ class FinalAnswerVerifier:
 
         supported_count = sum(1 for check in checks if check.supported)
         unsupported_count = len(checks) - supported_count
-        note = (
-            "Final-answer verification uses a heuristic claim-support layer over retrieved evidence. "
-            "It is meant to catch obvious unsupported statements and can later be replaced by a full NLI model."
-        )
         return VerificationReport(
             checks=checks,
             supported_count=supported_count,
             unsupported_count=unsupported_count,
-            verification_note=note,
+            verification_note=(
+                "Heuristic claim-support verification using lexical overlap. "
+                "Set NLI_VERIFIER_ENABLED=true and configure GEMINI_API_KEY for NLI-based verification."
+            ),
         )
 
     def _extract_claims(self, answer_text: str) -> list[str]:
         claims: list[str] = []
         for line in answer_text.splitlines():
             stripped = line.strip()
-            if not stripped or stripped.endswith(":"):
+            if not stripped or stripped.endswith(":") or stripped.endswith("]"):
                 continue
             if stripped in {
                 "Official Recommendation",

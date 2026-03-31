@@ -7,3 +7,9 @@ venv/
 ENV/
 .env
 data/chroma/
+data/chroma_test/
+data/cache/
+data/corpus_version.json
+evals/reports/
+frontend/node_modules/
+frontend/dist/
