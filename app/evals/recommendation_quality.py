@@ -13,7 +13,7 @@ TEST_PROFILES = [
     {
         "entrance_exam": "JEE Advanced",
         "rank": 2500,
-        "preferred_branches": ["Computer Science and Engineering"],
+        "preferred_branches": ["Computer Science and Engineering", "Mechanical Engineering"],
         "budget_lakh": 5.0,
         "preferred_zones": ["South"],
         "hostel_required": True,
