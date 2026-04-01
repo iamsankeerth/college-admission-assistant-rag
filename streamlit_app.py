@@ -1,3 +1,7 @@
+﻿# DEPRECATED: This Streamlit app is no longer maintained.
+# The React frontend (frontend/) is the current interface.
+# This file will be removed in a future release.
+
 from __future__ import annotations
 
 import asyncio
@@ -164,7 +168,7 @@ def _render_recommendation_card(item: dict[str, Any], rank: int) -> None:
 
 
 def main() -> None:
-    st.set_page_config(page_title="College Admission Assistance Agent", page_icon="🎓", layout="wide")
+    st.set_page_config(page_title="College Admission Assistance Agent", page_icon="ðŸŽ“", layout="wide")
     st.title("College Admission Assistance Agent")
     st.caption("Python + RAG + Streamlit recommendation demo for Indian college shortlisting.")
 

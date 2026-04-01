@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { ArrowLeft, GitCompare } from 'lucide-react';
 import CollegeCard from './CollegeCard';
+import FeedbackForm from './FeedbackForm';
 import './ShortlistResults.css';
 
 export default function ShortlistResults({ data, profile, onBack, onExplore, onCompare }) {
@@ -127,6 +128,17 @@ export default function ShortlistResults({ data, profile, onBack, onExplore, onC
             ))}
           </motion.div>
         )}
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+        >
+          <FeedbackForm
+            query={`${profile?.entrance_exam} rank ${profile?.rank} ≤₹${profile?.budget_lakh}L`}
+            recommendedColleges={recs.map(c => c.college_name)}
+          />
+        </motion.div>
       </div>
     </section>
   );
