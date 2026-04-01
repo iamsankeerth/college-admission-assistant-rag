@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, GitCompare } from 'lucide-react';
 import CollegeCard from './CollegeCard';
@@ -7,6 +7,12 @@ import './ShortlistResults.css';
 export default function ShortlistResults({ data, profile, onBack, onExplore, onCompare }) {
   const recs = data?.recommendations || [];
   const [selected, setSelected] = useState([]);
+
+  useEffect(() => {
+    if (data && profile) {
+      import('../storage').then(m => m.saveShortlist(profile, data));
+    }
+  }, [data, profile]);
 
   const toggleSelect = (collegeId) => {
     setSelected(prev =>
@@ -23,7 +29,6 @@ export default function ShortlistResults({ data, profile, onBack, onExplore, onC
   return (
     <section className="results-section">
       <div className="container">
-        {/* Results Header */}
         <motion.div
           className="results-header"
           initial={{ opacity: 0, y: 16 }}
@@ -66,7 +71,6 @@ export default function ShortlistResults({ data, profile, onBack, onExplore, onC
           </div>
         </motion.div>
 
-        {/* Compare Selection Hint */}
         {selected.length > 0 && selected.length < 2 && (
           <motion.div
             className="compare-hint"
@@ -78,7 +82,6 @@ export default function ShortlistResults({ data, profile, onBack, onExplore, onC
           </motion.div>
         )}
 
-        {/* Legend */}
         <motion.div
           className="results-legend"
           initial={{ opacity: 0 }}
@@ -99,7 +102,6 @@ export default function ShortlistResults({ data, profile, onBack, onExplore, onC
           )}
         </motion.div>
 
-        {/* Cards */}
         <div className="results-cards">
           {recs.map((college, i) => (
             <CollegeCard
@@ -113,7 +115,6 @@ export default function ShortlistResults({ data, profile, onBack, onExplore, onC
           ))}
         </div>
 
-        {/* Notes */}
         {data?.notes?.length > 0 && (
           <motion.div
             className="results-notes"

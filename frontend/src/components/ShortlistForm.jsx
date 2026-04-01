@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Search, ChevronDown, ChevronUp, MapPin, IndianRupee, Building2, GraduationCap, Hash, Home } from 'lucide-react';
 import { EXAM_OPTIONS, BRANCH_OPTIONS, STATE_OPTIONS, ZONE_OPTIONS } from '../data';
@@ -10,7 +10,7 @@ const fadeUp = {
   transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
 };
 
-export default function ShortlistForm({ onSubmit, isLoading }) {
+export default function ShortlistForm({ onSubmit, isLoading, initialValues }) {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [form, setForm] = useState({
     entrance_exam: '',
@@ -24,6 +24,12 @@ export default function ShortlistForm({ onSubmit, isLoading }) {
     include_rag_summary: true,
     include_public_signals: false,
   });
+
+  useEffect(() => {
+    if (initialValues) {
+      setForm(prev => ({ ...prev, ...initialValues }));
+    }
+  }, []);
 
   const updateField = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
 
@@ -39,11 +45,12 @@ export default function ShortlistForm({ onSubmit, isLoading }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!form.entrance_exam || !form.rank || !form.budget_lakh) return;
-    onSubmit({
+    const profile = {
       ...form,
       rank: parseInt(form.rank, 10),
       budget_lakh: parseFloat(form.budget_lakh),
-    });
+    };
+    onSubmit(profile);
   };
 
   const isValid = form.entrance_exam && form.rank && form.budget_lakh;
@@ -58,12 +65,11 @@ export default function ShortlistForm({ onSubmit, isLoading }) {
       <div className="container">
         <div className="form-header">
           <h2 className="gradient-text">Build Your Shortlist</h2>
-          <p>Tell us about your profile. We'll find colleges that match — ranked by evidence.</p>
+          <p>Tell us about your profile. We will find colleges that match — ranked by evidence.</p>
         </div>
 
         <form className="shortlist-form glass-panel" onSubmit={handleSubmit}>
           <div className="form-grid">
-            {/* Exam */}
             <div className="form-group">
               <label className="form-label">
                 <GraduationCap size={14} />
@@ -83,7 +89,6 @@ export default function ShortlistForm({ onSubmit, isLoading }) {
               </select>
             </div>
 
-            {/* Rank */}
             <div className="form-group">
               <label className="form-label">
                 <Hash size={14} />
@@ -101,7 +106,6 @@ export default function ShortlistForm({ onSubmit, isLoading }) {
               />
             </div>
 
-            {/* Budget */}
             <div className="form-group">
               <label className="form-label">
                 <IndianRupee size={14} />
@@ -120,7 +124,6 @@ export default function ShortlistForm({ onSubmit, isLoading }) {
               />
             </div>
 
-            {/* Results count */}
             <div className="form-group">
               <label className="form-label">
                 <Building2 size={14} />
@@ -139,7 +142,6 @@ export default function ShortlistForm({ onSubmit, isLoading }) {
             </div>
           </div>
 
-          {/* Preferred Branches */}
           <div className="form-group form-full">
             <label className="form-label">
               <GraduationCap size={14} />
@@ -160,7 +162,6 @@ export default function ShortlistForm({ onSubmit, isLoading }) {
             </div>
           </div>
 
-          {/* Advanced Section */}
           <button
             type="button"
             className="advanced-toggle"
@@ -178,7 +179,6 @@ export default function ShortlistForm({ onSubmit, isLoading }) {
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             >
-              {/* States */}
               <div className="form-group form-full">
                 <label className="form-label">
                   <MapPin size={14} />
@@ -198,7 +198,6 @@ export default function ShortlistForm({ onSubmit, isLoading }) {
                 </div>
               </div>
 
-              {/* Zones */}
               <div className="form-group form-full">
                 <label className="form-label">
                   <MapPin size={14} />
@@ -218,7 +217,6 @@ export default function ShortlistForm({ onSubmit, isLoading }) {
                 </div>
               </div>
 
-              {/* Hostel */}
               <div className="form-group">
                 <label className="form-label">
                   <Home size={14} />

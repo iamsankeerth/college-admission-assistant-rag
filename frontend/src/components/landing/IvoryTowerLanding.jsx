@@ -1,8 +1,9 @@
+﻿import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   ArrowRight, Search, Compass, ShieldCheck, BookOpen,
   TrendingUp, Crown, GraduationCap,
-  ChevronRight, Award, Landmark, ScrollText, Scale
+  ChevronRight, Award, Landmark, ScrollText, Scale, RefreshCw
 } from 'lucide-react';
 import './IvoryTowerLanding.css';
 
@@ -12,17 +13,62 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94], delay },
 });
 
-export default function IvoryTowerLanding({ onNavigate }) {
+export default function IvoryTowerLanding({ onNavigate, restoredShortlist }) {
+  const [showRestore, setShowRestore] = useState(false);
+
+  useEffect(() => {
+    if (restoredShortlist) {
+      setShowRestore(true);
+    }
+  }, [restoredShortlist]);
+
+  const handleContinue = () => {
+    setShowRestore(false);
+    onNavigate('shortlist-results');
+  };
+
+  const handleStartFresh = () => {
+    setShowRestore(false);
+    onNavigate('shortlist');
+  };
+
   return (
     <div className="ivory">
-      {/* Decorative elements */}
       <div className="ivory-bg">
         <div className="ivory-vignette" />
         <div className="ivory-gold-line top" />
         <div className="ivory-pattern" />
       </div>
 
-      {/* Nav */}
+      {showRestore && (
+        <motion.div
+          className="ivory-restore-banner"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <div className="ivory-container">
+            <div className="ivory-restore-inner">
+              <div className="ivory-restore-icon">
+                <RefreshCw size={18} />
+              </div>
+              <div className="ivory-restore-text">
+                <strong>Welcome back!</strong>
+                <span>We found your previous shortlist. Continue where you left off?</span>
+              </div>
+              <div className="ivory-restore-actions">
+                <button className="ivory-btn-gold small" onClick={handleContinue}>
+                  Continue
+                </button>
+                <button className="ivory-btn-subtle small" onClick={handleStartFresh}>
+                  Start Fresh
+                </button>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       <nav className="ivory-nav">
         <div className="ivory-container">
           <div className="ivory-nav-inner">
@@ -47,7 +93,6 @@ export default function IvoryTowerLanding({ onNavigate }) {
         </div>
       </nav>
 
-      {/* Hero */}
       <section className="ivory-hero">
         <div className="ivory-container">
           <motion.div className="ivory-hero-inner" initial="initial" animate="animate">
@@ -101,7 +146,6 @@ export default function IvoryTowerLanding({ onNavigate }) {
         </div>
       </section>
 
-      {/* Showcase Card */}
       <section className="ivory-showcase">
         <div className="ivory-container">
           <motion.div className="ivory-showcase-card" {...fadeUp(0.2)}>
@@ -153,7 +197,6 @@ export default function IvoryTowerLanding({ onNavigate }) {
         </div>
       </section>
 
-      {/* Two Paths */}
       <section className="ivory-paths">
         <div className="ivory-container">
           <motion.div className="ivory-paths-header" {...fadeUp(0)}>
@@ -210,7 +253,6 @@ export default function IvoryTowerLanding({ onNavigate }) {
         </div>
       </section>
 
-      {/* Principles */}
       <section className="ivory-principles">
         <div className="ivory-container">
           <motion.div className="ivory-principles-header" {...fadeUp(0)}>
@@ -233,7 +275,6 @@ export default function IvoryTowerLanding({ onNavigate }) {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="ivory-cta-section">
         <div className="ivory-container">
           <motion.div className="ivory-cta-box" {...fadeUp(0)}>
@@ -251,7 +292,6 @@ export default function IvoryTowerLanding({ onNavigate }) {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="ivory-footer">
         <div className="ivory-container">
           <div className="ivory-footer-line" />

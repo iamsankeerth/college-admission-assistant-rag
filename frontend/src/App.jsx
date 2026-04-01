@@ -1,4 +1,4 @@
-﻿import { useState, useCallback } from 'react';
+﻿import { useState, useCallback, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import IvoryTowerLanding from './components/landing/IvoryTowerLanding';
 import ShortlistForm from './components/ShortlistForm';
@@ -7,15 +7,42 @@ import LoadingState from './components/LoadingState';
 import ExplorePage from './components/ExplorePage';
 import ComparePage from './components/ComparePage';
 import { generateMockRecommendations } from './data';
+import { loadShortlist, saveProfile, clearShortlist, encodeShortlistIds, decodeShortlistIds } from './storage';
 
 export default function App() {
-  const [view, setView] = useState('home'); // home | shortlist | shortlist-results | explore | compare
+  const [view, setView] = useState('home');
   const [isLoading, setIsLoading] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [results, setResults] = useState(null);
   const [currentProfile, setCurrentProfile] = useState(null);
   const [exploreCollege, setExploreCollege] = useState(null);
   const [compareColleges, setCompareColleges] = useState(null);
+
+  const [restoredShortlist, setRestoredShortlist] = useState(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sharedIds = params.get('s');
+    if (sharedIds) {
+      const ids = decodeShortlistIds(sharedIds);
+      if (ids && Array.isArray(ids)) {
+        window.__cc_shared_ids = ids;
+      }
+    }
+
+    const saved = loadShortlist();
+    if (saved) {
+      setRestoredShortlist(saved);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (view === 'shortlist-results' && !isLoading && restoredShortlist && !results) {
+      setCurrentProfile(restoredShortlist.profile);
+      setResults(restoredShortlist.results);
+      setRestoredShortlist(null);
+    }
+  }, [view, isLoading, restoredShortlist, results]);
 
   const handleNavigate = useCallback((target) => {
     setView(target);
@@ -26,7 +53,6 @@ export default function App() {
       setExploreCollege(null);
     }
     if (target === 'compare') {
-      // don't reset compareColleges
     } else {
       setCompareColleges(null);
     }
@@ -35,6 +61,7 @@ export default function App() {
 
   const handleShortlistSubmit = useCallback(async (profile) => {
     setCurrentProfile(profile);
+    saveProfile(profile);
     setIsLoading(true);
     setLoadingProgress(0);
     setView('shortlist-results');
@@ -53,10 +80,22 @@ export default function App() {
       const { getRecommendations } = await import('./api');
       const data = await getRecommendations(profile);
       setResults(data);
+      if (window.__cc_shared_ids) {
+        const sharedIds = window.__cc_shared_ids;
+        delete window.__cc_shared_ids;
+        const filtered = data.recommendations.filter(c => sharedIds.includes(c.college_id));
+        setResults({ ...data, recommendations: filtered });
+      }
     } catch (err) {
       await new Promise(r => setTimeout(r, 2000));
       const mockData = generateMockRecommendations(profile);
       setResults(mockData);
+      if (window.__cc_shared_ids) {
+        const sharedIds = window.__cc_shared_ids;
+        delete window.__cc_shared_ids;
+        const filtered = mockData.recommendations.filter(c => sharedIds.includes(c.college_id));
+        setResults({ ...mockData, recommendations: filtered });
+      }
     } finally {
       clearInterval(progressInterval);
       setLoadingProgress(100);
@@ -76,12 +115,10 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Home view — IvoryTower landing only
   if (view === 'home') {
-    return <IvoryTowerLanding onNavigate={handleNavigate} />;
+    return <IvoryTowerLanding onNavigate={handleNavigate} restoredShortlist={restoredShortlist} />;
   }
 
-  // All other views — warm cream IvoryTower background
   return (
     <div className="ivory-app-root">
       <div className="ivory-app-bg">
@@ -100,6 +137,7 @@ export default function App() {
           <ShortlistForm
             onSubmit={handleShortlistSubmit}
             isLoading={isLoading}
+            initialValues={restoredShortlist?.profile}
           />
         )}
 
