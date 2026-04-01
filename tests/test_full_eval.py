@@ -65,8 +65,8 @@ def test_build_evaluation_dataset_skips_abstain_records():
     assert dataset.samples[0].reference == "Official counselling instructions."
 
 
-def test_run_full_eval_without_gemini_key_writes_skipped_report(tmp_path, monkeypatch):
-    dataset_path = tmp_path / "golden.jsonl"
+def test_run_full_eval_without_gemini_key_writes_skipped_report(workspace_tmp_path, monkeypatch):
+    dataset_path = workspace_tmp_path / "golden.jsonl"
     dataset_path.write_text(
         "\n".join(
             [
@@ -86,7 +86,7 @@ def test_run_full_eval_without_gemini_key_writes_skipped_report(tmp_path, monkey
         ),
         encoding="utf-8",
     )
-    report_path = tmp_path / "full_eval_report.json"
+    report_path = workspace_tmp_path / "full_eval_report.json"
 
     monkeypatch.setattr(
         "app.evals.full_eval.run_fast_eval",

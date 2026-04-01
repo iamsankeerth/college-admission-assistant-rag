@@ -45,6 +45,7 @@ async def test_recommend_always_hydrates_official_even_when_public_disabled():
         assert item.enrichment_status == EnrichmentStatus.HYDRATED
         assert item.enrichment is not None
         assert item.enrichment.outcomes_and_campus is not None
+        assert item.public_signals_report is None
 
 
 @pytest.mark.asyncio

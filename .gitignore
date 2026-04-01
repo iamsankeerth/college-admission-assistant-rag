@@ -13,3 +13,4 @@ data/corpus_version.json
 evals/reports/
 frontend/node_modules/
 frontend/dist/
+tmp_test/

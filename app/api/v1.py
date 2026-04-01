@@ -204,7 +204,10 @@ class CollegeProfileResponse(BaseModel):
 
 @v1.get("/admin/colleges", response_model=list[CollegeProfileResponse])
 async def v1_list_colleges() -> list[CollegeProfileResponse]:
-    profiles = profile_store.all()
+    try:
+        profiles = profile_store.all()
+    except Exception as exc:
+        raise CorpusError(f"Failed to read college profiles: {exc}")
     return [CollegeProfileResponse.model_validate(p) for p in profiles]
 
 

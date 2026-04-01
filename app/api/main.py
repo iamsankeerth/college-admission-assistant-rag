@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
@@ -124,27 +125,24 @@ async def health_readiness() -> HealthResponse:
     subsystems: dict[str, SubsystemHealth] = {}
     overall_status = "ok"
 
-    try:
-        vs = OfficialVectorStore()
-        vs.upsert_chunks([])
-        subsystems["vector_store"] = SubsystemHealth(status="ok", detail="ChromaDB accessible")
-    except Exception as exc:
-        subsystems["vector_store"] = SubsystemHealth(status="error", detail=str(exc))
+    # Vector store — lightweight path check, no ChromaDB client instantiation
+    persist_path = Path(settings.chroma_persist_dir)
+    if persist_path.exists():
+        subsystems["vector_store"] = SubsystemHealth(status="ok", detail="Vector store path accessible")
+    else:
+        subsystems["vector_store"] = SubsystemHealth(status="degraded", detail="Vector store path not found")
         overall_status = "degraded"
 
-    try:
-        from app.generation.service import build_answer_generator
-        gen = build_answer_generator()
-        subsystems["generator"] = SubsystemHealth(status="ok", detail=f"Provider: {gen.provider}")
-    except Exception as exc:
-        subsystems["generator"] = SubsystemHealth(status="error", detail=str(exc))
-        overall_status = "degraded"
+    # Generator — config-only check, no instantiation or provider construction
+    provider = getattr(settings, 'answer_provider', 'not_configured')
+    subsystems["generator"] = SubsystemHealth(status="ok", detail=f"Provider: {provider}")
 
+    # Public signals — cheap presence check, no network or construction side-effects
     try:
-        reddit_ok = public_signals_service.reddit_fetcher is not None
-        yt_ok = public_signals_service.youtube_fetcher is not None
+        reddit_ok = getattr(public_signals_service, 'reddit_fetcher', None) is not None
+        yt_ok = getattr(public_signals_service, 'youtube_fetcher', None) is not None
         if reddit_ok and yt_ok:
-            subsystems["public_signals"] = SubsystemHealth(status="ok", detail="Reddit and YouTube fetchers initialized")
+            subsystems["public_signals"] = SubsystemHealth(status="ok", detail="Reddit and YouTube fetchers available")
         else:
             subsystems["public_signals"] = SubsystemHealth(status="degraded", detail="Some fetchers unavailable")
             overall_status = "degraded"

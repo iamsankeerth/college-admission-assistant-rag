@@ -60,14 +60,14 @@ def test_final_answer_verifier_marks_unsupported_claim():
     assert any(check.supported is False for check in report.checks)
 
 
-def test_ingestion_service_indexes_local_file(tmp_path):
-    source_file = tmp_path / "fees.txt"
+def test_ingestion_service_indexes_local_file(workspace_tmp_path):
+    source_file = workspace_tmp_path / "fees.txt"
     source_file.write_text(
         "IIT Hyderabad released an official hostel fee notice for the current semester.",
         encoding="utf-8",
     )
-    registry_path = tmp_path / "registry.json"
-    persist_dir = tmp_path / "chroma"
+    registry_path = workspace_tmp_path / "registry.json"
+    persist_dir = workspace_tmp_path / "chroma"
     corpus = OfficialCorpus(registry_path=registry_path)
     vector_store = OfficialVectorStore(persist_dir=persist_dir)
     ingestion = OfficialIngestionService(corpus, vector_store)

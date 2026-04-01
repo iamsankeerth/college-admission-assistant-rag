@@ -154,3 +154,30 @@ def test_query_with_public_signals_uses_stubbed_report(monkeypatch):
     assert body["public_signals_used"] is True
     assert body["bias_warnings"]
     assert body["public_signals_report"]["reddit_themes"]
+
+
+def test_admin_colleges_list_returns_structured_error_on_store_failure(monkeypatch):
+    from app.api import v1 as v1_module
+
+    def raise_on_all(*args, **kwargs):
+        raise RuntimeError("Store read failed")
+    monkeypatch.setattr(v1_module.profile_store, "all", raise_on_all)
+    response = client.get("/v1/admin/colleges")
+    assert response.status_code == 500
+    body = response.json()
+    assert "error" in body
+    assert body["error"]["code"] == "CORPUS_ERROR"
+
+
+def test_health_ready_is_lightweight_and_safe():
+    from unittest.mock import patch
+
+    with patch("app.official.vector_store.OfficialVectorStore") as mock_vs:
+        with patch("app.generation.service.build_answer_generator") as mock_build:
+            response = client.get("/health/ready")
+            assert response.status_code == 200
+            body = response.json()
+            assert body["subsystems"]["generator"]["status"] == "ok"
+            assert "Provider:" in body["subsystems"]["generator"]["detail"]
+            mock_vs.assert_not_called()
+            mock_build.assert_not_called()
