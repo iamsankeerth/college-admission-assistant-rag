@@ -1,4 +1,4 @@
-﻿import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import AppLayout from './components/AppLayout';
 import AdminLayout from './components/admin/AdminLayout';
@@ -25,20 +25,17 @@ function AppRoutes() {
   const [exploreCollege, setExploreCollege] = useState(null);
   const [compareColleges, setCompareColleges] = useState(null);
   const [restoredShortlist, setRestoredShortlist] = useState(null);
+  const [sharedIds, setSharedIds] = useState(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const sharedIds = params.get('s');
-    if (sharedIds) {
-      const ids = decodeShortlistIds(sharedIds);
-      if (ids && Array.isArray(ids)) {
-        window.__cc_shared_ids = ids;
-      }
+    const encoded = params.get('s');
+    if (encoded) {
+      const ids = decodeShortlistIds(encoded);
+      if (ids && Array.isArray(ids)) setSharedIds(ids);
     }
     const saved = loadShortlist();
-    if (saved) {
-      setRestoredShortlist(saved);
-    }
+    if (saved) setRestoredShortlist(saved);
   }, []);
 
   useEffect(() => {
@@ -87,29 +84,33 @@ function AppRoutes() {
     try {
       const { getRecommendations } = await import('./api');
       const data = await getRecommendations(profile);
-      setResults(data);
-      if (window.__cc_shared_ids) {
-        const sharedIds = window.__cc_shared_ids;
-        delete window.__cc_shared_ids;
-        const filtered = data.recommendations.filter(c => sharedIds.includes(c.college_id));
-        setResults({ ...data, recommendations: filtered });
+      if (sharedIds) {
+        setResults({
+          ...data,
+          recommendations: data.recommendations.filter(c => sharedIds.includes(c.college_id)),
+        });
+        setSharedIds(null);
+      } else {
+        setResults(data);
       }
     } catch (err) {
       await new Promise(r => setTimeout(r, 2000));
       const mockData = generateMockRecommendations(profile);
-      setResults(mockData);
-      if (window.__cc_shared_ids) {
-        const sharedIds = window.__cc_shared_ids;
-        delete window.__cc_shared_ids;
-        const filtered = mockData.recommendations.filter(c => sharedIds.includes(c.college_id));
-        setResults({ ...mockData, recommendations: filtered });
+      if (sharedIds) {
+        setResults({
+          ...mockData,
+          recommendations: mockData.recommendations.filter(c => sharedIds.includes(c.college_id)),
+        });
+        setSharedIds(null);
+      } else {
+        setResults(mockData);
       }
     } finally {
       clearInterval(progressInterval);
       setLoadingProgress(100);
       setTimeout(() => setIsLoading(false), 500);
     }
-  }, [navigate]);
+  }, [navigate, sharedIds]);
 
   const handleExploreFromCard = useCallback((collegeName) => {
     setExploreCollege(collegeName);
