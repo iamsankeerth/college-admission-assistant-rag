@@ -1,0 +1,94 @@
+/* ============================================
+   DESIGN TOKENS — CollegeCompass
+   Ivory Tower Design System
+   ============================================ */
+
+:root {
+  /* ---- Background Layers ---- */
+  --bg-deep: #F5F2EB;
+  --bg-base: #FDFCF9;
+  --bg-elevated: #FFFFFF;
+  --bg-input: #F5F2EB;
+
+  /* ---- Surfaces ---- */
+  --surface: rgba(120, 100, 60, 0.04);
+  --surface-hover: rgba(120, 100, 60, 0.07);
+  --surface-active: rgba(120, 100, 60, 0.10);
+
+  /* ---- Foreground ---- */
+  --fg: #2C2418;
+  --fg-muted: #6B5D4A;
+  --fg-subtle: rgba(44, 36, 24, 0.60);
+  --fg-dim: rgba(44, 36, 24, 0.40);
+
+  /* ---- Accent (Gold) ---- */
+  --accent: #B8963E;
+  --accent-bright: #A07E30;
+  --accent-glow: rgba(184, 150, 62, 0.25);
+  --accent-subtle: rgba(184, 150, 62, 0.12);
+  --accent-muted: rgba(184, 150, 62, 0.06);
+
+  /* ---- Trust Colors ---- */
+  --trust-official: #3D7A4F;
+  --trust-official-glow: rgba(61, 122, 79, 0.2);
+  --trust-official-subtle: rgba(61, 122, 79, 0.06);
+  --trust-student: #B8963E;
+  --trust-student-glow: rgba(184, 150, 62, 0.2);
+  --trust-student-subtle: rgba(184, 150, 62, 0.06);
+  --trust-caution: #C65D3E;
+  --trust-caution-glow: rgba(198, 93, 62, 0.2);
+  --trust-caution-subtle: rgba(198, 93, 62, 0.06);
+
+  /* ---- Fit Buckets ---- */
+  --fit-safe: #3D7A4F;
+  --fit-moderate: #B8963E;
+  --fit-ambitious: #C65D3E;
+  --fit-stretch: #7A5EB6;
+
+  /* ---- Borders ---- */
+  --border: rgba(120, 100, 60, 0.12);
+  --border-hover: rgba(120, 100, 60, 0.22);
+  --border-accent: rgba(184, 150, 62, 0.30);
+
+  /* ---- Radius ---- */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 14px;
+  --radius-full: 9999px;
+
+  /* ---- Spacing ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ---- Typography ---- */
+  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-mono: 'DM Mono', 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* ---- Transitions ---- */
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-medium: 300ms;
+  --duration-slow: 600ms;
+  --duration-float: 8000ms;
+
+  /* ---- Shadows ---- */
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.03);
+  --shadow-card-hover: 0 4px 24px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-btn-accent: 0 2px 8px rgba(184, 150, 62, 0.2), inset 0 1px 0 0 rgba(255,255,255,0.25);
+  --shadow-btn-accent-hover: 0 4px 16px rgba(184, 150, 62, 0.3);
+  --shadow-inner-highlight: inset 0 1px 0 0 rgba(255,255,255,0.5);
+}

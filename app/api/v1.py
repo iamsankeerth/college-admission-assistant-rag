@@ -9,6 +9,7 @@ from app.api.middleware import get_request_id
 from app.config import settings
 from app.exceptions import CorpusError, NotFoundError
 from app.models import (
+    BranchCutoff,
     CollegeExploreRequest,
     CollegeExploreResponse,
     CollegeSignalsRequest,
@@ -183,16 +184,6 @@ async def v1_corpus_refresh() -> RefreshResponse:
     )
 
 
-class CollegeProfileUpdateRequest(BaseModel):
-    college_name: str | None = None
-    state: str | None = None
-    city: str | None = None
-    zone: str | None = None
-    annual_tuition_lakh: float | None = None
-    annual_hostel_lakh: float | None = None
-    hostel_available: bool | None = None
-
-
 class CollegeProfileResponse(BaseModel):
     college_id: str
     college_name: str
@@ -200,6 +191,65 @@ class CollegeProfileResponse(BaseModel):
     state: str
     city: str
     zone: str
+    location_type: str = ""
+    entrance_exams: list[str] = Field(default_factory=list)
+    branch_cutoffs: list[BranchCutoff] = Field(default_factory=list)
+    annual_tuition_lakh: float = 0.0
+    annual_hostel_lakh: float = 0.0
+    total_annual_cost_lakh: float = 0.0
+    hostel_available: bool = True
+    scholarship_notes: str = ""
+    official_source_urls: list[str] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list)
+
+
+class CollegeProfileCreateRequest(BaseModel):
+    college_id: str
+    college_name: str
+    institute_type: str
+    state: str
+    city: str
+    zone: str
+    location_type: str = ""
+    entrance_exams: list[str] = Field(default_factory=list)
+    branch_cutoffs: list[BranchCutoff] = Field(default_factory=list)
+    annual_tuition_lakh: float = 0.0
+    annual_hostel_lakh: float = 0.0
+    total_annual_cost_lakh: float = 0.0
+    hostel_available: bool = True
+    scholarship_notes: str = ""
+    official_source_urls: list[str] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list)
+
+
+class CollegeProfileFullUpdateRequest(BaseModel):
+    college_name: str | None = None
+    institute_type: str | None = None
+    state: str | None = None
+    city: str | None = None
+    zone: str | None = None
+    location_type: str | None = None
+    entrance_exams: list[str] | None = None
+    branch_cutoffs: list[BranchCutoff] | None = None
+    annual_tuition_lakh: float | None = None
+    annual_hostel_lakh: float | None = None
+    total_annual_cost_lakh: float | None = None
+    hostel_available: bool | None = None
+    scholarship_notes: str | None = None
+    official_source_urls: list[str] | None = None
+    tags: list[str] | None = None
+
+
+@v1.post("/admin/colleges", response_model=CollegeProfileResponse, status_code=201)
+async def v1_create_college(request: CollegeProfileCreateRequest) -> CollegeProfileResponse:
+    from app.models import CollegeProfile
+
+    if profile_store.get(request.college_id) is not None:
+        raise CorpusError(f"College with id '{request.college_id}' already exists")
+
+    profile = CollegeProfile.model_validate(request.model_dump())
+    profile_store.upsert(profile)
+    return CollegeProfileResponse.model_validate(profile)
 
 
 @v1.get("/admin/colleges", response_model=list[CollegeProfileResponse])
@@ -221,7 +271,7 @@ async def v1_get_college(college_id: str) -> CollegeProfileResponse:
 
 @v1.put("/admin/colleges/{college_id}")
 async def v1_update_college(
-    college_id: str, request: CollegeProfileUpdateRequest
+    college_id: str, request: CollegeProfileFullUpdateRequest
 ) -> CollegeProfileResponse:
     profile = profile_store.get(college_id)
     if profile is None:

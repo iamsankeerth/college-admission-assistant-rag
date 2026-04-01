@@ -1,0 +1,106 @@
+.loading-section {
+  padding: var(--space-16) 0;
+}
+
+.loading-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--space-10);
+  border-radius: var(--radius-xl);
+  text-align: center;
+}
+
+.loading-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--accent-muted);
+  border-radius: var(--radius-lg);
+  color: var(--accent);
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+.loading-header h3 {
+  font-size: 1.25rem;
+}
+
+.loading-header p {
+  font-size: 0.875rem;
+  color: var(--fg-dim);
+}
+
+.loading-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+  text-align: left;
+}
+
+.loading-step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  transition: all var(--duration-medium) var(--ease-expo);
+}
+
+.loading-step.active {
+  background: var(--accent-muted);
+}
+
+.loading-step.done { opacity: 0.5; }
+.loading-step.pending { opacity: 0.3; }
+
+.loading-step-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.loading-step.done .loading-step-icon {
+  color: var(--trust-official);
+}
+
+.loading-step-text { display: flex; flex-direction: column; }
+.loading-step-label { font-size: 0.875rem; font-weight: 500; color: var(--fg); }
+.loading-step-desc { font-size: 0.75rem; color: var(--fg-dim); }
+
+.loading-skeletons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+.skeleton-card {
+  padding: var(--space-5);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.skeleton-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}

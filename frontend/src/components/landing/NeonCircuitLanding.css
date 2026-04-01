@@ -1,0 +1,595 @@
+/* ============================================
+   NEON CIRCUIT — Electric Cyberpunk Dark Theme
+   Inspired by: Warp terminal, GitHub Copilot, Tron
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+
+.neon {
+  --n-bg: #080A0C;
+  --n-bg-subtle: #0D1117;
+  --n-surface: rgba(0, 255, 178, 0.03);
+  --n-surface-hover: rgba(0, 255, 178, 0.06);
+  --n-border: rgba(0, 255, 178, 0.08);
+  --n-border-strong: rgba(0, 255, 178, 0.18);
+  --n-fg: #E0F0E8;
+  --n-fg-muted: #5A7A6A;
+  --n-fg-dim: rgba(224, 240, 232, 0.3);
+  --n-green: #00FFB2;
+  --n-green-glow: rgba(0, 255, 178, 0.4);
+  --n-green-dim: rgba(0, 255, 178, 0.15);
+  --n-blue: #00B4FF;
+  --n-pink: #FF0080;
+  --n-yellow: #FFD600;
+  --n-font: 'Outfit', system-ui, sans-serif;
+  --n-mono: 'Fira Code', 'JetBrains Mono', monospace;
+
+  background: var(--n-bg);
+  color: var(--n-fg);
+  font-family: var(--n-font);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.neon-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ---- Background ---- */
+.neon-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.neon-gradient-green {
+  position: absolute;
+  top: -100px;
+  left: 40%;
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(0, 255, 178, 0.06), transparent 65%);
+  filter: blur(100px);
+}
+
+.neon-gradient-blue {
+  position: absolute;
+  bottom: 20%;
+  right: -50px;
+  width: 500px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(0, 180, 255, 0.04), transparent 65%);
+  filter: blur(100px);
+}
+
+.neon-scanline {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 178, 0.01) 2px,
+    rgba(0, 255, 178, 0.01) 4px
+  );
+}
+
+.neon-circuit-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image:
+    linear-gradient(var(--n-green) 1px, transparent 1px),
+    linear-gradient(90deg, var(--n-green) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Matrix Rain */
+.neon-matrix {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.neon-matrix-col {
+  position: absolute;
+  top: -100%;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--n-mono);
+  font-size: 0.6875rem;
+  color: var(--n-green);
+  animation: neon-rain linear infinite;
+  writing-mode: vertical-rl;
+  gap: 8px;
+  opacity: 0.15;
+}
+
+@keyframes neon-rain {
+  from { top: -100%; }
+  to { top: 100%; }
+}
+
+/* ---- Nav ---- */
+.neon-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8, 10, 12, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--n-border);
+}
+
+.neon-nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 54px;
+}
+
+.neon-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.neon-logo-hex {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--n-green);
+  color: var(--n-bg);
+  border-radius: 6px;
+  box-shadow: 0 0 16px var(--n-green-glow);
+}
+
+.neon-brand-text {
+  font-family: var(--n-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--n-fg);
+  letter-spacing: 0.1em;
+}
+
+.neon-text-glow {
+  color: var(--n-green);
+  text-shadow: 0 0 20px var(--n-green-glow);
+}
+
+.neon-nav-links {
+  display: flex;
+  gap: 4px;
+}
+
+.neon-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: none;
+  border: 1px solid transparent;
+  font-family: var(--n-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--n-fg-muted);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  letter-spacing: 0.06em;
+}
+
+.neon-nav-link:hover {
+  color: var(--n-green);
+  border-color: var(--n-border);
+  background: var(--n-surface);
+}
+
+.neon-nav-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--n-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: var(--n-green);
+  letter-spacing: 0.06em;
+  padding: 3px 10px;
+  border: 1px solid var(--n-border-strong);
+  border-radius: 4px;
+}
+
+.neon-nav-status svg {
+  animation: neon-pulse-icon 1.5s ease-in-out infinite;
+}
+
+@keyframes neon-pulse-icon {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ---- Hero ---- */
+.neon-hero {
+  position: relative;
+  z-index: 1;
+  padding: 80px 0 60px;
+}
+
+.neon-hero-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.neon-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--n-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--n-green);
+  padding: 4px 14px 4px 10px;
+  background: var(--n-green-dim);
+  border: 1px solid var(--n-border-strong);
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+  margin-bottom: 24px;
+}
+
+.neon-hero-title {
+  font-family: var(--n-font);
+  font-size: clamp(2.5rem, 5.5vw, 3.75rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--n-fg);
+  margin-bottom: 20px;
+}
+
+.neon-hero-desc {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--n-fg-muted);
+  max-width: 460px;
+  margin-bottom: 32px;
+}
+
+.neon-hero-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.neon-btn-glow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 24px;
+  background: var(--n-green);
+  color: var(--n-bg);
+  border: none;
+  border-radius: 6px;
+  font-family: var(--n-font);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 200ms ease;
+  box-shadow: 0 0 24px var(--n-green-glow), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.neon-btn-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 40px var(--n-green-glow);
+}
+
+.neon-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 24px;
+  background: transparent;
+  color: var(--n-fg);
+  border: 1px solid var(--n-border-strong);
+  border-radius: 6px;
+  font-family: var(--n-font);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.neon-btn-outline:hover {
+  border-color: var(--n-green);
+  color: var(--n-green);
+  box-shadow: 0 0 16px rgba(0, 255, 178, 0.15);
+}
+
+.neon-hero-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.neon-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--n-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 3px;
+  letter-spacing: 0.06em;
+}
+
+.neon-tag.verified {
+  color: var(--n-green);
+  background: var(--n-green-dim);
+  border: 1px solid rgba(0, 255, 178, 0.2);
+}
+
+.neon-tag.cited {
+  color: var(--n-blue);
+  background: rgba(0, 180, 255, 0.1);
+  border: 1px solid rgba(0, 180, 255, 0.2);
+}
+
+.neon-tag.honest {
+  color: var(--n-yellow);
+  background: rgba(255, 214, 0, 0.08);
+  border: 1px solid rgba(255, 214, 0, 0.15);
+}
+
+/* ---- Terminal ---- */
+.neon-terminal {
+  background: rgba(13, 17, 23, 0.95);
+  border: 1px solid var(--n-border-strong);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 255, 178, 0.05);
+}
+
+.neon-terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: rgba(0, 255, 178, 0.03);
+  border-bottom: 1px solid var(--n-border);
+}
+
+.neon-terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.neon-terminal-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.neon-terminal-dots span:nth-child(1) { background: #FF5F56; }
+.neon-terminal-dots span:nth-child(2) { background: #FFBD2E; }
+.neon-terminal-dots span:nth-child(3) { background: #27C93F; }
+
+.neon-terminal-title {
+  font-family: var(--n-mono);
+  font-size: 0.6875rem;
+  color: var(--n-fg-muted);
+}
+
+.neon-terminal-body {
+  padding: 16px;
+  font-family: var(--n-mono);
+  font-size: 0.8125rem;
+  line-height: 1.8;
+}
+
+.neon-term-line {
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.neon-term-line.indent { padding-left: 24px; }
+
+.neon-term-prompt { color: var(--n-green); }
+.neon-term-cmd { color: var(--n-fg); }
+.neon-term-key { color: var(--n-blue); }
+.neon-term-str { color: var(--n-yellow); }
+.neon-term-num { color: var(--n-pink); }
+.neon-term-arrow { color: var(--n-green); }
+.neon-term-result { color: var(--n-fg-muted); }
+
+.neon-term-line.output { margin-top: 4px; }
+.neon-term-line.blink { margin-top: 8px; }
+
+.neon-cursor {
+  color: var(--n-green);
+  animation: neon-blink 1s step-end infinite;
+}
+
+@keyframes neon-blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+/* ---- Features ---- */
+.neon-features {
+  position: relative;
+  z-index: 1;
+  padding: 80px 0;
+}
+
+.neon-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--n-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--n-fg-muted);
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.neon-section-icon { color: var(--n-green); }
+
+.neon-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.neon-feature-card {
+  position: relative;
+  padding: 28px 24px;
+  background: rgba(0, 255, 178, 0.02);
+  border: 1px solid var(--n-border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 250ms ease;
+}
+
+.neon-feature-card:hover {
+  border-color: var(--n-border-strong);
+  box-shadow: 0 0 24px rgba(0, 255, 178, 0.06);
+}
+
+.neon-feature-border-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--n-green-dim), transparent);
+  pointer-events: none;
+}
+
+.neon-feature-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--n-green);
+  background: var(--n-green-dim);
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.neon-feature-card h3 {
+  font-family: var(--n-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+}
+
+.neon-feature-card p {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--n-fg-muted);
+}
+
+/* ---- CTA ---- */
+.neon-cta {
+  position: relative;
+  z-index: 1;
+  padding: 0 0 80px;
+}
+
+.neon-cta-card {
+  position: relative;
+  text-align: center;
+  padding: 56px 40px;
+  background: rgba(0, 255, 178, 0.02);
+  border: 1px solid var(--n-border-strong);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.neon-cta-glow {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 120px;
+  background: radial-gradient(ellipse, var(--n-green-glow), transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.neon-cta-icon {
+  color: var(--n-green);
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.neon-cta-card h2 {
+  font-family: var(--n-font);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.neon-cta-card > p {
+  color: var(--n-fg-muted);
+  margin-bottom: 28px;
+  position: relative;
+}
+
+/* ---- Footer ---- */
+.neon-footer {
+  position: relative;
+  z-index: 1;
+  padding: 40px 0;
+  border-top: 1px solid var(--n-border);
+  text-align: center;
+}
+
+.neon-footer-brand {
+  font-family: var(--n-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--n-fg-muted);
+  margin-bottom: 6px;
+}
+
+.neon-footer-note {
+  font-size: 0.6875rem;
+  color: var(--n-fg-dim);
+  max-width: 450px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .neon-hero { padding: 48px 0 32px; }
+  .neon-hero-layout { grid-template-columns: 1fr; }
+  .neon-terminal { display: none; }
+  .neon-feature-grid { grid-template-columns: 1fr; }
+  .neon-nav-links { display: none; }
+  .neon-matrix { display: none; }
+}
