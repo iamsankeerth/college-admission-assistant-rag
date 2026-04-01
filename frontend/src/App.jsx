@@ -1,19 +1,21 @@
-import { useState, useCallback } from 'react';
+﻿import { useState, useCallback } from 'react';
 import Navbar from './components/Navbar';
 import IvoryTowerLanding from './components/landing/IvoryTowerLanding';
 import ShortlistForm from './components/ShortlistForm';
 import ShortlistResults from './components/ShortlistResults';
 import LoadingState from './components/LoadingState';
 import ExplorePage from './components/ExplorePage';
+import ComparePage from './components/ComparePage';
 import { generateMockRecommendations } from './data';
 
 export default function App() {
-  const [view, setView] = useState('home'); // home | shortlist | shortlist-results | explore
+  const [view, setView] = useState('home'); // home | shortlist | shortlist-results | explore | compare
   const [isLoading, setIsLoading] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [results, setResults] = useState(null);
   const [currentProfile, setCurrentProfile] = useState(null);
   const [exploreCollege, setExploreCollege] = useState(null);
+  const [compareColleges, setCompareColleges] = useState(null);
 
   const handleNavigate = useCallback((target) => {
     setView(target);
@@ -22,6 +24,11 @@ export default function App() {
     }
     if (target === 'explore') {
       setExploreCollege(null);
+    }
+    if (target === 'compare') {
+      // don't reset compareColleges
+    } else {
+      setCompareColleges(null);
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -63,6 +70,12 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  const handleCompare = useCallback((colleges) => {
+    setCompareColleges(colleges);
+    setView('compare');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   // Home view — IvoryTower landing only
   if (view === 'home') {
     return <IvoryTowerLanding onNavigate={handleNavigate} />;
@@ -100,12 +113,21 @@ export default function App() {
             profile={currentProfile}
             onBack={() => handleNavigate('shortlist')}
             onExplore={handleExploreFromCard}
+            onCompare={handleCompare}
           />
         )}
 
         {view === 'explore' && (
           <ExplorePage
             initialCollege={exploreCollege}
+            onBack={() => handleNavigate(results ? 'shortlist-results' : 'home')}
+          />
+        )}
+
+        {view === 'compare' && (
+          <ComparePage
+            colleges={compareColleges}
+            profile={currentProfile}
             onBack={() => handleNavigate(results ? 'shortlist-results' : 'home')}
           />
         )}

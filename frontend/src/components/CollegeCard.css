@@ -377,3 +377,38 @@
   .cc-score-bars { flex-direction: column; }
   .cc-stats-grid { grid-template-columns: 1fr; }
 }
+.cc-compare-toggle {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  color: var(--fg-muted);
+  transition: all var(--duration-normal) var(--ease-expo);
+  padding: 0;
+}
+
+.cc-compare-toggle:hover {
+  background: var(--bg-warm);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.college-card-selected {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px rgba(184, 150, 62, 0.15), var(--shadow-card);
+}
+
+.college-card-selected .cc-compare-toggle {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}

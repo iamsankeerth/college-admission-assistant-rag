@@ -28,6 +28,34 @@
   flex-wrap: wrap;
 }
 
+.results-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.compare-hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: rgba(184, 150, 62, 0.06);
+  border: 1px solid rgba(184, 150, 62, 0.15);
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  color: var(--accent);
+  margin-bottom: var(--space-4);
+}
+
+.legend-selected-count {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--fg-muted);
+  font-weight: 500;
+}
+
 .results-legend {
   display: flex;
   align-items: center;

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   MapPin, IndianRupee, GraduationCap, ChevronDown, ChevronUp,
   ExternalLink, ShieldCheck, AlertTriangle, TrendingUp,
-  Building2, BookOpen, Briefcase, Home, Star, Target, Zap, MessageCircle
+  Building2, BookOpen, Briefcase, Home, Star, Target, Zap, MessageCircle, CheckSquare, Square
 } from 'lucide-react';
 import { useMouseSpotlight } from '../hooks/useMouseSpotlight';
 import './CollegeCard.css';
@@ -15,7 +15,7 @@ const FIT_CONFIG = {
   stretch: { color: 'var(--fit-stretch)', label: 'Stretch', icon: <Zap size={14} /> },
 };
 
-export default function CollegeCard({ college, rank: cardRank, onExplore }) {
+export default function CollegeCard({ college, rank: cardRank, onExplore, selected, onToggleSelect }) {
   const [expanded, setExpanded] = useState(false);
   const [showSignals, setShowSignals] = useState(false);
   const { onMouseMove, spotlightStyle } = useMouseSpotlight();
@@ -24,7 +24,7 @@ export default function CollegeCard({ college, rank: cardRank, onExplore }) {
 
   return (
     <motion.div
-      className="college-card card"
+      className={`college-card card ${selected ? 'college-card-selected' : ''}`}
       onMouseMove={onMouseMove}
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
@@ -33,6 +33,17 @@ export default function CollegeCard({ college, rank: cardRank, onExplore }) {
       {/* Spotlight overlay */}
       <div className="card-spotlight" style={spotlightStyle} />
       <div className="card-edge-highlight" />
+
+      {/* Compare Checkbox */}
+      {onToggleSelect && (
+        <button
+          className="cc-compare-toggle"
+          onClick={(e) => { e.stopPropagation(); onToggleSelect(); }}
+          title={selected ? 'Remove from comparison' : 'Add to comparison'}
+        >
+          {selected ? <CheckSquare size={18} /> : <Square size={18} />}
+        </button>
+      )}
 
       {/* Header */}
       <div className="cc-header">

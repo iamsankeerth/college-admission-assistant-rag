@@ -1,10 +1,24 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Filter, RefreshCw, ChevronDown } from 'lucide-react';
+import { ArrowLeft, GitCompare } from 'lucide-react';
 import CollegeCard from './CollegeCard';
 import './ShortlistResults.css';
 
-export default function ShortlistResults({ data, profile, onBack, onExplore }) {
+export default function ShortlistResults({ data, profile, onBack, onExplore, onCompare }) {
   const recs = data?.recommendations || [];
+  const [selected, setSelected] = useState([]);
+
+  const toggleSelect = (collegeId) => {
+    setSelected(prev =>
+      prev.includes(collegeId)
+        ? prev.filter(id => id !== collegeId)
+        : prev.length < 3
+          ? [...prev, collegeId]
+          : prev
+    );
+  };
+
+  const selectedColleges = recs.filter(c => selected.includes(c.college_id));
 
   return (
     <section className="results-section">
@@ -31,12 +45,38 @@ export default function ShortlistResults({ data, profile, onBack, onExplore }) {
             </p>
           </div>
 
-          <div className="results-profile-summary">
-            <span className="badge badge-neutral">{profile?.entrance_exam}</span>
-            <span className="badge badge-neutral">Rank {profile?.rank?.toLocaleString()}</span>
-            <span className="badge badge-neutral">≤₹{profile?.budget_lakh}L</span>
+          <div className="results-header-actions">
+            <div className="results-profile-summary">
+              <span className="badge badge-neutral">{profile?.entrance_exam}</span>
+              <span className="badge badge-neutral">Rank {profile?.rank?.toLocaleString()}</span>
+              <span className="badge badge-neutral">≤₹{profile?.budget_lakh}L</span>
+            </div>
+            {selected.length >= 2 && (
+              <motion.button
+                className="btn btn-primary"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                onClick={() => onCompare?.(selectedColleges)}
+              >
+                <GitCompare size={16} />
+                Compare {selected.length} Colleges
+              </motion.button>
+            )}
           </div>
         </motion.div>
+
+        {/* Compare Selection Hint */}
+        {selected.length > 0 && selected.length < 2 && (
+          <motion.div
+            className="compare-hint"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <span>Select at least {2 - selected.length} more college{2 - selected.length > 1 ? 's' : ''} to compare</span>
+          </motion.div>
+        )}
 
         {/* Legend */}
         <motion.div
@@ -52,6 +92,11 @@ export default function ShortlistResults({ data, profile, onBack, onExplore }) {
             <LegendItem color="var(--fit-ambitious)" label="Ambitious — tight odds" />
             <LegendItem color="var(--fit-stretch)" label="Stretch — aspirational" />
           </div>
+          {selected.length > 0 && (
+            <div className="legend-selected-count">
+              {selected.length}/3 selected for comparison
+            </div>
+          )}
         </motion.div>
 
         {/* Cards */}
@@ -62,6 +107,8 @@ export default function ShortlistResults({ data, profile, onBack, onExplore }) {
               college={college}
               rank={i}
               onExplore={onExplore}
+              selected={selected.includes(college.college_id)}
+              onToggleSelect={() => toggleSelect(college.college_id)}
             />
           ))}
         </div>
