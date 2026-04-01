@@ -1,15 +1,22 @@
 ﻿import { useState, useCallback, useEffect } from 'react';
-import Navbar from './components/Navbar';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import AppLayout from './components/AppLayout';
+import AdminLayout from './components/admin/AdminLayout';
 import IvoryTowerLanding from './components/landing/IvoryTowerLanding';
 import ShortlistForm from './components/ShortlistForm';
 import ShortlistResults from './components/ShortlistResults';
 import LoadingState from './components/LoadingState';
 import ExplorePage from './components/ExplorePage';
 import ComparePage from './components/ComparePage';
+import CollegeListPage from './components/admin/CollegeListPage';
+import CollegeEditPage from './components/admin/CollegeEditPage';
+import CorpusStatusPage from './components/admin/CorpusStatusPage';
 import { generateMockRecommendations } from './data';
-import { loadShortlist, saveProfile, clearShortlist, encodeShortlistIds, decodeShortlistIds } from './storage';
+import { loadShortlist, saveProfile, encodeShortlistIds, decodeShortlistIds } from './storage';
 
-export default function App() {
+function AppRoutes() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [view, setView] = useState('home');
   const [isLoading, setIsLoading] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -17,7 +24,6 @@ export default function App() {
   const [currentProfile, setCurrentProfile] = useState(null);
   const [exploreCollege, setExploreCollege] = useState(null);
   const [compareColleges, setCompareColleges] = useState(null);
-
   const [restoredShortlist, setRestoredShortlist] = useState(null);
 
   useEffect(() => {
@@ -29,7 +35,6 @@ export default function App() {
         window.__cc_shared_ids = ids;
       }
     }
-
     const saved = loadShortlist();
     if (saved) {
       setRestoredShortlist(saved);
@@ -37,27 +42,32 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (view === 'shortlist-results' && !isLoading && restoredShortlist && !results) {
+    if (location.pathname === '/results' && !isLoading && restoredShortlist && !results) {
       setCurrentProfile(restoredShortlist.profile);
       setResults(restoredShortlist.results);
       setRestoredShortlist(null);
     }
-  }, [view, isLoading, restoredShortlist, results]);
+  }, [location.pathname, isLoading, restoredShortlist, results]);
 
   const handleNavigate = useCallback((target) => {
-    setView(target);
     if (target === 'shortlist') {
-      setResults(null);
-    }
-    if (target === 'explore') {
-      setExploreCollege(null);
-    }
-    if (target === 'compare') {
+      setView('shortlist');
+      navigate('/shortlist');
+    } else if (target === 'explore') {
+      setView('explore');
+      navigate('/explore');
+    } else if (target === 'compare') {
+      setView('compare');
+      navigate('/compare');
+    } else if (target === 'shortlist-results') {
+      setView('shortlist-results');
+      navigate('/results');
     } else {
-      setCompareColleges(null);
+      setView('home');
+      navigate('/');
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  }, [navigate]);
 
   const handleShortlistSubmit = useCallback(async (profile) => {
     setCurrentProfile(profile);
@@ -65,13 +75,11 @@ export default function App() {
     setIsLoading(true);
     setLoadingProgress(0);
     setView('shortlist-results');
+    navigate('/results');
 
     const progressInterval = setInterval(() => {
       setLoadingProgress(prev => {
-        if (prev >= 90) {
-          clearInterval(progressInterval);
-          return 90;
-        }
+        if (prev >= 90) { clearInterval(progressInterval); return 90; }
         return prev + Math.random() * 15;
       });
     }, 400);
@@ -101,86 +109,61 @@ export default function App() {
       setLoadingProgress(100);
       setTimeout(() => setIsLoading(false), 500);
     }
-  }, []);
+  }, [navigate]);
 
   const handleExploreFromCard = useCallback((collegeName) => {
     setExploreCollege(collegeName);
     setView('explore');
+    navigate(`/explore/${encodeURIComponent(collegeName)}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  }, [navigate]);
 
   const handleCompare = useCallback((colleges) => {
     setCompareColleges(colleges);
     setView('compare');
+    navigate('/compare');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  }, [navigate]);
 
-  if (view === 'home') {
-    return <IvoryTowerLanding onNavigate={handleNavigate} restoredShortlist={restoredShortlist} />;
-  }
+  const getBackUrl = () => results ? '/results' : '/';
 
   return (
-    <div className="ivory-app-root">
-      <div className="ivory-app-bg">
-        <div className="ivory-vignette" />
-        <div className="ivory-gold-line top" />
-        <div className="ivory-pattern" />
-      </div>
+    <Routes>
+      <Route element={<AppLayout />}>
+        <Route path="/" element={
+          <IvoryTowerLanding onNavigate={handleNavigate} restoredShortlist={restoredShortlist} />
+        } />
+        <Route path="/shortlist" element={
+          <ShortlistForm onSubmit={handleShortlistSubmit} isLoading={isLoading} initialValues={restoredShortlist?.profile} />
+        } />
+        <Route path="/results" element={
+          <>
+            {isLoading && <LoadingState progress={loadingProgress} />}
+            {!isLoading && results && (
+              <ShortlistResults data={results} profile={currentProfile} onBack={() => handleNavigate('shortlist')} onExplore={handleExploreFromCard} onCompare={handleCompare} />
+            )}
+          </>
+        } />
+        <Route path="/explore/:name" element={
+          <ExplorePage initialCollege={exploreCollege} onBack={() => navigate(getBackUrl())} />
+        } />
+        <Route path="/compare" element={
+          <ComparePage colleges={compareColleges} profile={currentProfile} onBack={() => navigate(getBackUrl())} />
+        } />
+      </Route>
+      <Route element={<AdminLayout />}>
+        <Route path="/admin/colleges" element={<CollegeListPage />} />
+        <Route path="/admin/colleges/:id" element={<CollegeEditPage />} />
+        <Route path="/admin/corpus" element={<CorpusStatusPage />} />
+      </Route>
+    </Routes>
+  );
+}
 
-      <Navbar
-        activeView={view === 'shortlist-results' ? 'shortlist' : view}
-        onNavigate={handleNavigate}
-      />
-
-      <main className="ivory-main">
-        {view === 'shortlist' && (
-          <ShortlistForm
-            onSubmit={handleShortlistSubmit}
-            isLoading={isLoading}
-            initialValues={restoredShortlist?.profile}
-          />
-        )}
-
-        {view === 'shortlist-results' && isLoading && (
-          <LoadingState progress={loadingProgress} />
-        )}
-
-        {view === 'shortlist-results' && !isLoading && results && (
-          <ShortlistResults
-            data={results}
-            profile={currentProfile}
-            onBack={() => handleNavigate('shortlist')}
-            onExplore={handleExploreFromCard}
-            onCompare={handleCompare}
-          />
-        )}
-
-        {view === 'explore' && (
-          <ExplorePage
-            initialCollege={exploreCollege}
-            onBack={() => handleNavigate(results ? 'shortlist-results' : 'home')}
-          />
-        )}
-
-        {view === 'compare' && (
-          <ComparePage
-            colleges={compareColleges}
-            profile={currentProfile}
-            onBack={() => handleNavigate(results ? 'shortlist-results' : 'home')}
-          />
-        )}
-      </main>
-
-      <footer className="ivory-footer">
-        <div className="ivory-container">
-          <div className="ivory-footer-line" />
-          <p className="ivory-footer-brand">CollegeCompass</p>
-          <p className="ivory-footer-note">
-            Data sourced from official college websites. Cutoff ranks are indicative and may vary.
-            Always verify with official counselling portals before making decisions.
-          </p>
-        </div>
-      </footer>
-    </div>
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }

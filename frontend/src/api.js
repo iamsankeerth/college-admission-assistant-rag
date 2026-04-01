@@ -48,3 +48,35 @@ export async function getCollegeSignals(params) {
     body: JSON.stringify(params),
   });
 }
+
+export async function getColleges() {
+  return request('/v1/admin/colleges');
+}
+
+export async function getCollege(id) {
+  return request(`/v1/admin/colleges/${id}`);
+}
+
+export async function createCollege(data) {
+  return request('/v1/admin/colleges', { method: 'POST', body: JSON.stringify(data) });
+}
+
+export async function updateCollege(id, data) {
+  return request(`/v1/admin/colleges/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+}
+
+export async function deleteCollege(id) {
+  return request(`/v1/admin/colleges/${id}`, { method: 'DELETE' });
+}
+
+export async function getCorpusStatus() {
+  return request('/v1/admin/corpus/status');
+}
+
+export async function refreshCorpus() {
+  return request('/v1/admin/corpus/refresh', { method: 'POST' });
+}
+
+export async function submitFeedback(data) {
+  return request('/v1/feedback', { method: 'POST', body: JSON.stringify(data) });
+}

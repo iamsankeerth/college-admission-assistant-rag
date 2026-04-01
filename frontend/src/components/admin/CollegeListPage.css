@@ -1,0 +1,130 @@
+﻿.admin-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.admin-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.admin-page-title {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: var(--fg);
+  margin-bottom: 2px;
+}
+
+.admin-page-subtitle {
+  font-size: 0.875rem;
+  color: var(--fg-muted);
+}
+
+.admin-search-bar {
+  position: relative;
+  margin-bottom: var(--space-6);
+  max-width: 400px;
+}
+
+.admin-search-icon {
+  position: absolute;
+  left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--fg-dim);
+  pointer-events: none;
+}
+
+.admin-search-bar .input {
+  padding-left: calc(var(--space-3) + 16px + var(--space-2));
+  width: 100%;
+}
+
+.college-table-wrapper {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.college-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.college-table th {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  background: var(--bg-warm);
+  border-bottom: 1px solid var(--border);
+}
+
+.college-table td {
+  padding: var(--space-4);
+  font-size: 0.875rem;
+  color: var(--fg);
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.college-table tr:last-child td { border-bottom: none; }
+.college-table tr:hover td { background: var(--surface); }
+
+.td-muted { color: var(--fg-muted); }
+
+.college-name-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.college-name {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  color: var(--fg);
+}
+
+.action-buttons {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.btn-sm {
+  padding: var(--space-2);
+  min-width: unset;
+}
+
+.btn-danger:hover { color: #DC2626; border-color: #DC2626; background: rgba(220, 38, 38, 0.04); }
+
+.empty-state {
+  text-align: center;
+  color: var(--fg-muted);
+  padding: var(--space-10) !important;
+}
+
+.admin-error {
+  padding: var(--space-4);
+  background: rgba(220, 38, 38, 0.06);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: var(--radius-md);
+  color: #DC2626;
+  font-size: 0.875rem;
+  margin-bottom: var(--space-6);
+}
+
+.admin-loading {
+  text-align: center;
+  padding: var(--space-10);
+  color: var(--fg-muted);
+}

@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, ArrowLeft, Building2, MapPin, IndianRupee, GraduationCap,
@@ -17,8 +18,10 @@ const fadeUp = {
 };
 
 export default function ExplorePage({ initialCollege, onBack }) {
-  const [searchQuery, setSearchQuery] = useState(initialCollege || '');
-  const [selectedCollege, setSelectedCollege] = useState(initialCollege || '');
+  const { name: urlName } = useParams();
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCollege, setSelectedCollege] = useState('');
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -30,15 +33,17 @@ export default function ExplorePage({ initialCollege, onBack }) {
   const [signalsData, setSignalsData] = useState(null);
   const [signalsLoading, setSignalsLoading] = useState(false);
 
+  const collegeName = urlName || initialCollege;
+
   const filtered = COLLEGE_NAMES.filter(c =>
     c.toLowerCase().includes(searchQuery.toLowerCase())
   ).slice(0, 8);
 
   useEffect(() => {
-    if (initialCollege) {
-      handleExplore(initialCollege);
+    if (collegeName) {
+      handleExplore(collegeName);
     }
-  }, [initialCollege]);
+  }, [collegeName]);
 
   const handleExplore = async (name) => {
     setSelectedCollege(name);
@@ -100,7 +105,6 @@ export default function ExplorePage({ initialCollege, onBack }) {
   return (
     <section className="explore-section">
       <div className="container">
-        {/* Header */}
         <motion.div className="explore-header" {...fadeUp}>
           {onBack && (
             <button className="btn btn-ghost" onClick={onBack}>
@@ -111,7 +115,6 @@ export default function ExplorePage({ initialCollege, onBack }) {
           <p>Search for any college to see official evidence, admissions, placements, and more.</p>
         </motion.div>
 
-        {/* Search */}
         <motion.div
           className="explore-search-container"
           initial={{ opacity: 0, y: 16 }}
@@ -168,7 +171,6 @@ export default function ExplorePage({ initialCollege, onBack }) {
           </AnimatePresence>
         </motion.div>
 
-        {/* Loading */}
         {loading && (
           <motion.div className="explore-loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Loader2 size={24} className="spin-icon" style={{ color: 'var(--accent)' }} />
@@ -176,7 +178,6 @@ export default function ExplorePage({ initialCollege, onBack }) {
           </motion.div>
         )}
 
-        {/* Error */}
         {error && (
           <motion.div className="explore-error" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <AlertTriangle size={16} />
@@ -184,7 +185,6 @@ export default function ExplorePage({ initialCollege, onBack }) {
           </motion.div>
         )}
 
-        {/* Empty State */}
         {!loading && !data && !error && (
           <motion.div
             className="explore-empty"
@@ -208,7 +208,6 @@ export default function ExplorePage({ initialCollege, onBack }) {
           </motion.div>
         )}
 
-        {/* College Detail */}
         {!loading && data && (
           <ExploreDetail
             data={data}
@@ -250,7 +249,6 @@ function ExploreDetail({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* College Name Header */}
       <div className="ed-hero">
         <div className="ed-hero-content">
           <h2>{data.college_name}</h2>
@@ -263,7 +261,6 @@ function ExploreDetail({
         </div>
       </div>
 
-      {/* Official Summary */}
       <div className="ed-section" onMouseMove={onMouseMove}>
         <div className="card-spotlight" style={spotlightStyle} />
         <div className="ed-section-header">
@@ -278,7 +275,6 @@ function ExploreDetail({
         </div>
       </div>
 
-      {/* Cost & Admissions */}
       {enrichment?.cost_and_admissions && (
         <div className="ed-section">
           <div className="ed-section-header">
@@ -314,7 +310,6 @@ function ExploreDetail({
         </div>
       )}
 
-      {/* Outcomes & Campus */}
       {enrichment?.outcomes_and_campus && (
         <div className="ed-section">
           <div className="ed-section-header">
@@ -350,7 +345,6 @@ function ExploreDetail({
         </div>
       )}
 
-      {/* Citations */}
       {data.citations?.length > 0 && (
         <div className="ed-section">
           <div className="ed-section-header">
@@ -375,7 +369,6 @@ function ExploreDetail({
         </div>
       )}
 
-      {/* Public Signals (opt-in) */}
       <div className="ed-section ed-signals-section">
         <button
           className="ed-signals-toggle"
@@ -451,7 +444,6 @@ function ExploreDetail({
         </AnimatePresence>
       </div>
 
-      {/* Follow-up Question */}
       <div className="ed-section">
         <div className="ed-section-header">
           <div className="ed-section-title">
@@ -479,7 +471,6 @@ function ExploreDetail({
           </button>
         </div>
 
-        {/* Follow-up Answer */}
         {followUpAnswer && (
           <motion.div
             className="ed-followup-answer"
@@ -518,7 +509,6 @@ function ExploreDetail({
 }
 
 function handleFollowUpKeyDown(e) {
-  // handled via onKeyDown in input
 }
 
 function CampusCard({ icon, title, text }) {

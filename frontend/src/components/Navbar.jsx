@@ -1,15 +1,25 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Search, GraduationCap, Compass } from 'lucide-react';
 import './Navbar.css';
 
-export default function Navbar({ activeView, onNavigate }) {
+export default function Navbar() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const isActive = (path) => {
+    if (path === '/results') return location.pathname === '/results';
+    if (path === '/shortlist') return location.pathname === '/shortlist';
+    if (path === '/explore') return location.pathname.startsWith('/explore');
+    return false;
+  };
 
   return (
     <nav className="navbar">
       <div className="navbar-inner container">
-        <button className="navbar-brand" onClick={() => onNavigate('home')}>
+        <button className="navbar-brand" onClick={() => navigate('/')}>
           <div className="navbar-logo">
             <GraduationCap size={20} strokeWidth={1.8} />
           </div>
@@ -20,15 +30,15 @@ export default function Navbar({ activeView, onNavigate }) {
 
         <div className="navbar-links">
           <button
-            className={`navbar-link ${activeView === 'shortlist' ? 'active' : ''}`}
-            onClick={() => onNavigate('shortlist')}
+            className={`navbar-link ${isActive('/shortlist') ? 'active' : ''}`}
+            onClick={() => navigate('/shortlist')}
           >
             <Search size={15} />
             Shortlist
           </button>
           <button
-            className={`navbar-link ${activeView === 'explore' ? 'active' : ''}`}
-            onClick={() => onNavigate('explore')}
+            className={`navbar-link ${isActive('/explore') ? 'active' : ''}`}
+            onClick={() => navigate('/explore')}
           >
             <Compass size={15} />
             Explore
@@ -57,14 +67,14 @@ export default function Navbar({ activeView, onNavigate }) {
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
             <button
-              className={`navbar-mobile-link ${activeView === 'shortlist' ? 'active' : ''}`}
-              onClick={() => { onNavigate('shortlist'); setMobileOpen(false); }}
+              className={`navbar-mobile-link ${isActive('/shortlist') ? 'active' : ''}`}
+              onClick={() => { navigate('/shortlist'); setMobileOpen(false); }}
             >
               <Search size={16} /> Shortlist Colleges
             </button>
             <button
-              className={`navbar-mobile-link ${activeView === 'explore' ? 'active' : ''}`}
-              onClick={() => { onNavigate('explore'); setMobileOpen(false); }}
+              className={`navbar-mobile-link ${isActive('/explore') ? 'active' : ''}`}
+              onClick={() => { navigate('/explore'); setMobileOpen(false); }}
             >
               <Compass size={16} /> Explore a College
             </button>
