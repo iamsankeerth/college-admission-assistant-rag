@@ -19,7 +19,7 @@ client = TestClient(app)
 
 def test_query_returns_structured_answer():
     response = client.post(
-        "/query",
+        "/v1/query",
         json={
             "question": "How are admissions handled at IIT Hyderabad?",
             "college_name": "IIT Hyderabad",
@@ -36,7 +36,7 @@ def test_query_returns_structured_answer():
 
 def test_recommend_endpoint_returns_personalized_results():
     response = client.post(
-        "/recommend",
+        "/v1/recommend",
         json={
             "entrance_exam": "JEE Main",
             "rank": 12000,
@@ -56,7 +56,7 @@ def test_recommend_endpoint_returns_personalized_results():
 
 
 def test_preference_guide_endpoint_returns_fields():
-    response = client.get("/guide/preferences")
+    response = client.get("/v1/guide/preferences")
     assert response.status_code == 200
     body = response.json()
     assert body["fields"]
@@ -65,7 +65,7 @@ def test_preference_guide_endpoint_returns_fields():
 
 def test_query_can_return_debug_trace():
     response = client.post(
-        "/query",
+        "/v1/query",
         json={
             "question": "What do official sources say about IIT Hyderabad hostel facilities?",
             "college_name": "IIT Hyderabad",
@@ -80,7 +80,7 @@ def test_query_can_return_debug_trace():
 
 def test_query_abstains_on_unsupported_specific_claim():
     response = client.post(
-        "/query",
+        "/v1/query",
         json={
             "question": "What was the exact highest salary package and closing rank for computer science at IIT Hyderabad in 2025?",
             "college_name": "IIT Hyderabad",
@@ -142,7 +142,7 @@ def test_query_with_public_signals_uses_stubbed_report(monkeypatch):
     monkeypatch.setattr(main.public_signals_service, "analyze", fake_analyze)
 
     response = client.post(
-        "/query",
+        "/v1/query",
         json={
             "question": "What is campus life like at IIT Hyderabad?",
             "college_name": "IIT Hyderabad",

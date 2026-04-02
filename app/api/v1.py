@@ -21,20 +21,16 @@ from app.models import (
     StudentPreferenceGuide,
 )
 from app.official.corpus_manager import CorpusManager
-from app.official.service import OfficialEvidenceService
-from app.public_signals.service import PublicSignalsService
-from app.recommendation import RecommendationService, build_preference_guide
+from app.recommendation import build_preference_guide
 from app.recommendation.store import CollegeProfileStore
-from app.verification.service import FinalAnswerVerifier
-
-
-official_service = OfficialEvidenceService()
-public_signals_service = PublicSignalsService()
-verifier = FinalAnswerVerifier()
-recommendation_service = RecommendationService(
-    official_service=official_service,
-    public_signals_service=public_signals_service,
+from app.dependencies import (
+    official_service,
+    public_signals_service,
+    verifier,
+    recommendation_service,
 )
+from app.public_signals.router import detect_college_name
+
 profile_store = CollegeProfileStore()
 corpus_manager = CorpusManager()
 
@@ -64,7 +60,7 @@ async def v1_preference_guide() -> StudentPreferenceGuide:
 @v1.post("/query", response_model=QueryResponse)
 async def v1_query(request: QueryRequest) -> QueryResponse:
     request_id = get_request_id()
-    college_name = request.college_name
+    college_name = request.college_name or detect_college_name(request.question)
     status, answer, citations, official_answer, trace = official_service.answer_question(
         request.question,
         college_name,
@@ -311,8 +307,8 @@ class FeedbackResponse(BaseModel):
 @v1.post("/feedback", response_model=FeedbackResponse)
 async def v1_feedback(request: FeedbackRequest) -> FeedbackResponse:
     import uuid
-    from pathlib import Path
     import json
+    from pathlib import Path
 
     feedback_id = str(uuid.uuid4())
     feedback_entry = {
