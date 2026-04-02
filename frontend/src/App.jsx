@@ -130,9 +130,9 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route element={<AppLayout />}>
+      <Route element={<AppLayout location={location} />}>
         <Route path="/" element={
-          <IvoryTowerLanding onNavigate={handleNavigate} restoredShortlist={restoredShortlist} />
+          <IvoryTowerLanding onNavigate={handleNavigate} restoredShortlist={restoredShortlist} hideNav={true} />
         } />
         <Route path="/shortlist" element={
           <ShortlistForm onSubmit={handleShortlistSubmit} isLoading={isLoading} initialValues={restoredShortlist?.profile} />

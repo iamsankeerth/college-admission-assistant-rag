@@ -1,7 +1,8 @@
-﻿import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 
-export default function AppLayout() {
+export default function AppLayout({ location }) {
+  const isLanding = location && location.pathname === '/';
   return (
     <div className="ivory-app-root">
       <div className="ivory-app-bg">
@@ -9,7 +10,7 @@ export default function AppLayout() {
         <div className="ivory-gold-line top" />
         <div className="ivory-pattern" />
       </div>
-      <Navbar />
+      {!isLanding && <Navbar />}
       <main className="ivory-main">
         <Outlet />
       </main>
