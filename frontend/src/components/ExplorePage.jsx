@@ -459,7 +459,7 @@ function ExploreDetail({
             placeholder={`Ask about ${data.college_name} — e.g. "What are the hostel fees?"`}
             value={followUpQ}
             onChange={(e) => setFollowUpQ(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && followUpQ.trim() && handleFollowUpKeyDown(e)}
+            onKeyDown={(e) => e.key === 'Enter' && followUpQ.trim() && onFollowUpSubmit()}
             disabled={followUpLoading}
           />
           <button
@@ -508,8 +508,7 @@ function ExploreDetail({
   );
 }
 
-function handleFollowUpKeyDown(e) {
-}
+// handleFollowUpKeyDown removed — onFollowUpSubmit called inline
 
 function CampusCard({ icon, title, text }) {
   return (

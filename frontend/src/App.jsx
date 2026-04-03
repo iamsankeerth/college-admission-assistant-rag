@@ -145,7 +145,7 @@ function AppRoutes() {
             )}
           </>
         } />
-        <Route path="/explore/:name" element={
+        <Route path="/explore/:name?" element={
           <ExplorePage initialCollege={exploreCollege} onBack={() => navigate(getBackUrl())} />
         } />
         <Route path="/compare" element={
